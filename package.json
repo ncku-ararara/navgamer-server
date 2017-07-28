@@ -1,0 +1,17 @@
+{
+    "name": "ararara-server",
+    "main": "app.js",
+    "config": {
+        "port": 4000
+    },
+    "scripts": {
+        "build": "npm install",
+        "start": "node app.js",
+        "all": "npm run build && npm run start"
+    },
+    "license": "GPL-3.0",
+    "dependencies": {
+        "ejs": "^2.5.5",
+        "express": "^4.6.1"
+    }
+}
