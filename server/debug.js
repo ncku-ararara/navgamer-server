@@ -1,3 +1,4 @@
+const path = require('path');
 const formidable = require('formidable');
 const { DB } = require('./db');
 
@@ -34,7 +35,7 @@ class Debugger {
 	
 	adf_g(req,res){
 		// fetch id to get download file path
-		console.log(`ID: ${req.query.id}`);
+		console.log(`[Debug] ID: ${req.query.id}`);
 		DB.get_adf(req.query.id,function(err,obj){
 			if(err){
 				res.end(err);
@@ -42,7 +43,9 @@ class Debugger {
 			else{
 				// find !
 				console.log(`Get matching result! Path:${obj.path}, Location:${obj.location}`);
-				res.end(`Get matching result! Path:${obj.path}, Location:${obj.location}`);
+				// And then fetch the file for download (path from mongo must eliminate `"`)
+				var file = path.join(__dirname,'..',obj.path.split('"').join(''));
+				res.download(file);
 			}
 		});
 	}
