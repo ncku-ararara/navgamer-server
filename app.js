@@ -9,22 +9,27 @@ const bodyParser = require('body-parser');
 const { Debugger } = require('./server/debug');
 const { IntroService } = require('./server/intro');
 const { DB } = require('./server/db');
-/* define app */
-const app = express();
+/* define app(2 for secure & download) */
+const app = express(),app_s = express();
 app.set('view engine', 'ejs');
+app_s.set('view engine','ejs');
 
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json());
+app_s.use(bodyParser.urlencoded({
+	extended: true
+}));
+app_s.use(bodyParser.json());
 
 /* redirect & static link */
-app.set('views',path.join(__dirname,'client/views'));
-app.use(express.static('client/elements'));
-app.use(express.static('client/img'));
-app.use(express.static('client/css'));
-app.use(express.static('client/js'));
-app.use(express.static('client/lib'));
+app_s.set('views',path.join(__dirname,'client/views'));
+app_s.use(express.static('client/elements'));
+app_s.use(express.static('client/img'));
+app_s.use(express.static('client/css'));
+app_s.use(express.static('client/js'));
+app_s.use(express.static('client/lib'));
 
 /* ssl usage */
 var options = {
@@ -37,11 +42,13 @@ var options = {
 
 /* Both (Secure & Download), often for testbed or introduction */
 Debugger.init(app);
+Debugger.init(app_s);
 IntroService.init(app);
+IntroService.init(app_s);
 /**/
 
 /* 2 Server create! */
-const secure_server = https.createServer(options,app);
+const secure_server = https.createServer(options,app_s);
 const download_server = http.createServer(app);
 
 secure_server.listen(process.env.npm_package_config_secure_port, function() {
