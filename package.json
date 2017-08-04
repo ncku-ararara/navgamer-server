@@ -2,7 +2,8 @@
     "name": "ararara-server",
     "main": "app.js",
     "config": {
-        "port": 4000
+        "secure_port": 4000,
+        "download_port": 4001
     },
     "scripts": {
         "build": "npm install",

@@ -36,6 +36,7 @@ class Debugger {
 	adf_g(req,res){
 		// fetch id to get download file path
 		console.log(`[Debug] ID: ${req.query.id}`);
+		console.log(`[Debug] Request Header: ${JSON.stringify(req.headers)}`);
 		DB.get_adf(req.query.id,function(err,obj){
 			if(err){
 				res.end(err);

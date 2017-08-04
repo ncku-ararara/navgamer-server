@@ -1,5 +1,6 @@
 /* library */
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -32,11 +33,21 @@ var options = {
 }
 
 /* Initialize all module */
+/* Need to separate "Secure service" & "Download Service" */
+
+/* Both (Secure & Download), often for testbed or introduction */
 Debugger.init(app);
 IntroService.init(app);
+/**/
 
-const server = https.createServer(options,app);
+/* 2 Server create! */
+const secure_server = https.createServer(options,app);
+const download_server = http.createServer(app);
 
-server.listen(process.env.npm_package_config_port, function() {
-    console.log("Server listening on port " + process.env.npm_package_config_port);
+secure_server.listen(process.env.npm_package_config_secure_port, function() {
+    console.log("Secure Server listening on port " + process.env.npm_package_config_secure_port);
+});
+
+download_server.listen(process.env.npm_package_config_download_port, function() {
+    console.log("Download Server listening on port " + process.env.npm_package_config_download_port);
 });
