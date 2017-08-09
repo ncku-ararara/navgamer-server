@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<!-- Title & Icon -->
+<% include ../elements/meta %>
+<% include ../elements/lib %>
+<title><%= title %></title>
+<link rel="icon" href="icon.jpg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> <!-- Socket.io lib -->
+</head>
+<header>
+    <% include ../elements/chatroom_footer %>
+</header>
+<body>
+	<input type="hidden" id="room_name" value="<%= room_name %>">
+    <input type="hidden" id="username" value="<%= username %>">
+    <div class="container">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-triangle-right"></span> KevinBOT
+                </div>
+                <div class="panel-body">
+                    <pre id="chatbody" style="height: 80%; max-height:80%; overflow-y:scroll;">歡迎跟 KevinBOT 作互動!! ^^
+-----------------------------------------------
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+const socket = io();
+
+// Join the target channel
+socket.emit('join',{
+	room_name: $('#room_name').val()
+});
+
+// update message 
+socket.on('new_msg',function(msg){
+	appender(msg.who,msg.content);
+});
+
+// sending message
+function send(){
+    // emit to server
+	socket.emit('chat',{
+		who: $('#username').val(),
+		content: $('#chattext').val()
+	});
+    // clear the value
+    $('#chattext').val("");
+}
+
+// Append new message
+function appender(user,content){
+	if(user == "KevinBOT"){
+		$('#chatbody').html( $('#chatbody').html() +'\r\n[BOT]'+ user + ": " + content);
+	}
+	else{
+		$('#chatbody').html( $('#chatbody').html() +'\r\n'+ user + ": " + content);
+	}
+}
+</script>
+</html>

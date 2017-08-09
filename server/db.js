@@ -37,7 +37,7 @@ class DB {
 		var adf_model = this.adf_m;
 		this.adf_m.findOne({beaconID: id},'location path',function(err,match){
 			if(err){
-				callback(1,"Error in set adf finding.");
+				callback(1,"internal error");
 			}
 			else{
 				if(match == null){
@@ -45,7 +45,7 @@ class DB {
 					let newAdf = new adf_model({beaconID: id,location: loc,path: path});
 					newAdf.save(function(s_err,newAdf){
 						if(s_err){
-							callback(1,"Error when saving initializing adf")
+							callback(1,"internal error")
 						}
 						else{
 							callback(0,"success");
@@ -58,7 +58,7 @@ class DB {
 					match.location = loc;
 					match.save(function(s_err,match){
 						if(s_err){
-							callback(1,"Error when updating adf")
+							callback(1,"internal error")
 						}
 						else{
 							callback(0,"success");
@@ -71,12 +71,12 @@ class DB {
 	get_adf(id,callback){
 		this.adf_m.findOne({beaconID: id},'location path',function(err,match){
 			if(err){
-				callback(1,"Error in get adf finding.");
+				callback(1,"internal error");
 			}
 			else{
 				if(match == null){
 					// not found 
-					callback(1,"Not found");
+					callback(1,"external error");
 				}
 				else{
 					// return result

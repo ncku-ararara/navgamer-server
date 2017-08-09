@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Title & Icon -->
+<title><%= title %></title>
+<link rel="icon" href="icon.jpg">
+<% include ../elements/meta %>
+<% include ../elements/lib %>
+</head>
+<body>
+
+<div class="container font-fresca">
+	<!-- Purpose -->
+	<h2> NavGamer RESTful API Document </h2>
+	<hr>
+	<h5> <%= api.version %> </h5>
+	<!-- User Part -->
+	<div class="panel-group">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-triangle-right"><span> User 
+			</div>
+			<div class="panel-body">
+				<!-- Each part here --> 
+				<% for(var index in api.user){ %>
+					<!-- URL goes here -->
+					<h4> URL: </h4>
+					<div class="input-group">
+						<span class="input-group-btn">
+						<% if(api.user[index].method == "GET"){ %>
+							<button class="btn btn-success" type="button"><%= api.user[index].method %></button>
+						<% }else if(api.user[index].method == "POST"){ %>
+							<button class="btn btn-info" type="button"><%= api.user[index].method %></button>
+						<% } %>
+						</span>
+						<span class="input-group-addon"><i class="fa fa-code" aria-hidden="true"></i><strong> <%= api.user[index].usage %> </strong></span>
+						<input type="text" class="form-control" placeholder="user-add" aria-describedby="basic-addon1" value="<%= api.user[index].url %>" readonly="true">
+					</div>
+					<br>
+					<!-- Description -->
+					<h4> Description: </h4> 
+					<pre><%= api.user[index].description %></pre>
+					<!-- Field Parameter goes here -->
+					<h4> Field (Parameter): </h4>
+					<ol>
+						<% if(api.user[index].method == "POST"){ %>
+						<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Field Name</th>
+								<th>Field Type</th>
+							</tr>
+							</thead>
+						<tbody>
+						<% for(var v_index in api.user[index].field){ %>
+						<tr>
+							<td><kbd class="field"><%= api.user[index].field[v_index].name %></kbd></td>
+							<td><%= api.user[index].field[v_index].type %></td>
+						</tr>
+						<% } %>
+						</tbody>
+						</table>
+						<% } %>
+					</ol>
+					<!-- Server Response goes here -->
+					<h4> Server Response: </h4>
+					<hr>
+					<ul> Error: <kbd><%= api.user[index].error %></kbd> </ul>
+					<br>
+					<ul> Success: <kbd><%= api.user[index].success %></kbd> </ul>
+					<hr>
+				<% } %>
+			</div>
+		</div>
+	</div><!-- User Part -->
+	<hr>
+	
+</div>
+
+</body>
+</html>

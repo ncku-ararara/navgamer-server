@@ -1,6 +1,7 @@
 const path = require('path');
 const formidable = require('formidable');
 const { DB } = require('./db');
+const { chatBot } = require('./chatbot');
 
 class Debugger {
 	init(app){
@@ -9,10 +10,10 @@ class Debugger {
 		// debug usage - setting 
 		app.get('/adf_s',this.adf_s);
 		app.get('/adf_g',this.adf_g);
-		// download debug
-		app.get('/de_download',this.de_download);
 		// upload debug
 		app.post('/de_upload',this.de_upload);
+		// chatbot testing 
+		app.get('/chatbot',this.chatbot);
 	}
 	
 	test(req,res){
@@ -33,6 +34,7 @@ class Debugger {
 		});
 	}
 	
+	/* Test database functionality */
 	adf_g(req,res){
 		// fetch id to get download file path
 		console.log(`[Debug] ID: ${req.query.id}`);
@@ -51,19 +53,17 @@ class Debugger {
 		});
 	}
 	
-	/* Test database functionality */
-	de_download(req,res){
-		// testing download usage
-		console.log(`[Debug] Download target adf file`);
-		// get id 
-		console.log(`[Debug] beacon id: {req.query.id}`);
-		
-		res.end("OK! Start getting download!");
-	}
-	
 	de_upload(req,res){
 		// testing upload usage
 		res.end("Working");
+	}
+	
+	chatbot(req,res){
+		chatBot.commute(req.query.str,function(err,data){
+			console.log("Get Result: " + data);
+			res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
+			res.end("你說: " + req.query.str + "\r\nKevinBOT 說: "+data);
+		});
 	}
 }
 

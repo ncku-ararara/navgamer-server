@@ -1,0 +1,40 @@
+{
+	"version": "v0.0.1",
+	"user": [
+		{
+			"usage": "[Build] Register New User",
+			"method": "POST",
+			"url": "https://kevin.imslab.org/register",
+			"description": "註冊一組新的使用者",
+			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"} ],
+			"error": "{\"result\":\"Duplicated\"} , {\"result\":\"Error Register\"}",
+			"success": "{\"result\":\"Passed\"}"
+		},
+		{
+			"usage": "[Debug] Download Adf File",
+			"method": "GET",
+			"url": "http://kevin.imslab.org/adf_g?id=...",
+			"description": "下載相對應 beacon ID 的 adf 檔案； https 也同樣支援！",
+			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+			"success": "{\"result\":\"success\"}"
+		},
+		{
+			"usage": "[Debug] Setting Beacon ID & ADF",
+			"method": "GET",
+			"url": "http://kevin.imslab.org/adf_s?id=...&path=...&loc=...",
+			"description": "修改特定的 beacon ID 對應到的相依資料",
+			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+			"success": "{\"result\":\"success\"}"
+		}
+	],
+	"dev": [
+		{
+			"usage": "[Debug] List out all ADF usage",
+			"method": "GET",
+			"url": "http://kevin.imslab.org/adf",
+			"description": "列出目前使用的 adf 分佈情況",
+			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+			"success": "{\"result\":\"success\"}"
+		}
+	]
+}
