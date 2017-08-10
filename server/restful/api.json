@@ -25,13 +25,29 @@
 			"description": "修改特定的 beacon ID 對應到的相依資料",
 			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
 			"success": "{\"result\":\"success\"}"
+		},
+		{
+			"usage": "[Online] Chatbot usage",
+			"method": "GET",
+			"url": "https://kevin.imslab.org/chatroom?room_name=...&name=...",
+			"description": "跟 chatbot 在聊天室頻道做互動",
+			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+			"success": "{\"result\":\"success\"}"
+		},
+		{
+			"usage": "[Debug] Get Chatbot response",
+			"method": "GET",
+			"url": "https://kevin.imslab.org/chatbot?str=...",
+			"description": "取得一次 chatbot 的回覆訊息",
+			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+			"success": "{\"result\":\"success\"}"
 		}
 	],
 	"dev": [
 		{
 			"usage": "[Debug] List out all ADF usage",
 			"method": "GET",
-			"url": "http://kevin.imslab.org/adf",
+			"url": "https://kevin.imslab.org/adf",
 			"description": "列出目前使用的 adf 分佈情況",
 			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
 			"success": "{\"result\":\"success\"}"

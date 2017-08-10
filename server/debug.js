@@ -62,7 +62,7 @@ class Debugger {
 		chatBot.commute(req.query.str,function(err,data){
 			console.log("Get Result: " + data);
 			res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
-			res.end("你說: " + req.query.str + "\r\nKevinBOT 說: "+data);
+			res.end(data); // only response goes here
 		});
 	}
 }
