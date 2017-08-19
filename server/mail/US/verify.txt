@@ -1,0 +1,5 @@
+Please using the url by yourself(using any browser you can find) with specific format to get back your password.
+
+The format is : https://kevin.imslab.org(:4000)/verify_manual?username=<your_name>&code=<code_down_here>
+
+Your code is : (In upcoming letter)

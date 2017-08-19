@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const { Debugger } = require('./server/debug');
 const { IntroService } = require('./server/intro');
 const { DB } = require('./server/db');
+const { UserService } = require('./server/account');
 const { IO } = require('./server/io');
 const { IOService } = require('./server/io_service');
 /* define app(2 for secure & download) */
@@ -49,13 +50,13 @@ const download_server = http.createServer(app);
 /* Both (Secure & Download), often for testbed or introduction */
 Debugger.init(app);
 Debugger.init(app_s);
-IntroService.init(app);
 IntroService.init(app_s);
 /* Special for https */
+UserService.init(app_s);
 IO.init(secure_server);
 IOService.init(app_s);
-/* 2 Server create! */
 
+/* 2 Server create! */
 secure_server.listen(process.env.npm_package_config_secure_port, function() {
     console.log("Secure Server listening on port " + process.env.npm_package_config_secure_port);
 });

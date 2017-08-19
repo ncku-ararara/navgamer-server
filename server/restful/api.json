@@ -2,13 +2,30 @@
 	"version": "v0.0.1",
 	"user": [
 		{
-			"usage": "[Build] Register New User",
+			"usage": "[Online] Register New User",
 			"method": "POST",
 			"url": "https://kevin.imslab.org/register",
 			"description": "註冊一組新的使用者",
-			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"} ],
-			"error": "{\"result\":\"Duplicated\"} , {\"result\":\"Error Register\"}",
-			"success": "{\"result\":\"Passed\"}"
+			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},{"name":"email","type":"String"} ],
+			"error": "{\"result\":\"duplicated\"} , {\"result\":\"internal error\"}",
+			"success": "{\"result\":\"success\"}"
+		},
+		{
+			"usage": "[Online] Checking mail",
+			"method": "GET",
+			"url": "https://kevin.imslab.org/checkmail?email=...",
+			"description": "測試該信箱是否已經被使用",
+			"error": "{\"result\":\"internal error\"}",
+			"success": "{\"result\":\"existed\"} ,{\"result\":\"not found\"}"
+		},
+		{
+			"usage": "[Online] User Login",
+			"method": "POST",
+			"url": "https://kevin.imslab.org/login",
+			"description": "合法的使用者登入",
+			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"}],
+			"error": "{\"result\":\"login failed\"} , {\"result\":\"internal error\"}",
+			"success": "{\"result\":\"success\"}"
 		},
 		{
 			"usage": "[Debug] Download Adf File",

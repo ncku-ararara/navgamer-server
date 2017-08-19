@@ -19,6 +19,7 @@
         "formidable": "^1.1.1",
         "mongoose": "^4.9.5",
         "moment": "^2.18.1",
+        "randomstring": "^1.1.5",
         "socket.io": "^2.0.3"
     }
 }
