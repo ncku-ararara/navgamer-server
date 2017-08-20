@@ -28,6 +28,15 @@
 			"success": "{\"result\":\"success\"}"
 		},
 		{
+			"usage": "[Online] Recovery for the forgotten password",
+			"method": "GET",
+			"url": "https://kevin.imslab.org/forget_pass",
+			"description": "遺忘密碼時觸發補救辦法",
+			"field": [ {"name":"username","type":"String"} ],
+			"error": "{\"result\":\"wrong account\"} , {\"result\":\"internal error\"}",
+			"success": "{\"result\": (JSON format) {\"email: u_email\",\"code: generate-code\"}}"
+		},
+		{
 			"usage": "[Debug] Download Adf File",
 			"method": "GET",
 			"url": "http://kevin.imslab.org/adf_g?id=...",
