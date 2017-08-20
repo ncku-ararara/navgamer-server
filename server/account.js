@@ -18,7 +18,7 @@ class UserService {
         const username = req.body.username;
         const password = req.body.password;
         const email = req.body.email;
-        const ltype = req.body.ltype == undefined ? 'TW' : 'US';
+        const ltype = ( req.body.ltype == undefined ? 'TW' : req.body.ltype );
         console.log(`Username: ${username}, Password: ${password}, Email: ${email}`);
         // get register function
         DB.user_register(username,password,email,function(err,msg){
@@ -55,7 +55,7 @@ class UserService {
 
     forget_pass(req,res){
         const username = req.query.username;
-        const ltype = req.body.ltype == undefined ? 'TW' : 'US';
+        const ltype = ( req.body.ltype == undefined ? 'TW' : req.body.ltype );
         // using username to find and generate code for it
         DB.user_gettmpcode(username,function(err,msg){
             if(err)

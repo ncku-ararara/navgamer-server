@@ -9,7 +9,15 @@
 	- Develope with `v0.7.5`
 	- Run by `python3.5.2`
 	- More details about usage, check out corpus files in `server/chatbot/data`.
+- [Postfix](http://www.postfix.org/)
+	- v3.1.0
+	- Served as mail server in this project.
+	- [Installation guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-16-04)
 
-## Run up service
+## Setting before run up service
 - Make a directory in project root named `ararara-download` as the adf storage.
-- using `npm run all` to start server.
+- Check out mail server configuration.
+- Using `npm run all` to start server.
+
+## Author
+- Kevin Cyu, kevinbird61@gmail.com
