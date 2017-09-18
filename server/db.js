@@ -187,7 +187,7 @@ class DB {
 			});
 	}
 
-	user_props_update(name,pass,props_quant,callback){
+	user_props_insertORupdate(name,pass,props_quant_array,callback){
 		this.user_m.findOne({username: name, password: pass},'props_quant',function(err,match){
 			if(err)
 				callback(1,"internal error");
@@ -196,8 +196,295 @@ class DB {
 					callback(1,"illegal account");
 				}
 				else{
-					// FIXME: update/concat
-					callback(0,"working");
+					// append 
+					if(props_quant_array.length == 1){
+						let in_index = match.props_quant.findIndex(i => i.id === props_quant_array[0].id);
+						if(in_index == -1)
+							match.props_quant.push(props_quant_array[0]); // push this element
+						else
+							match.props_quant[in_index] = props_quant_array[0]; // update
+					}
+					else{
+						// concat array / insert array
+						for(var a_index in props_quant_array){
+							let in_index = match.props_quant.findIndex(i => i.id === props_quant_array[a_index].id);
+							if(in_index == -1)
+								match.props_quant.push(props_quant_array[a_index]);
+							else
+								match.props_quant[in_index] = props_quant_array[a_index];
+						}
+					}
+					// deal saving
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_props_delete(name,pass,props_quant_array,callback){
+		this.user_m.findOne({username: name, password: pass},'props_quant',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"illegal account");
+				}
+				else{
+					let checksum = 0;
+					if(props_quant_array.length == 1){
+						// get elements index
+						let de_index = match.props_quant.findIndex(i => i.id === props_quant_array[0].id);
+						// delete
+						if(de_index != -1){
+							match.props_quant.splice(de_index,1); 
+							checksum++;
+						}
+					}
+					else{
+						// delete total array
+						for(var a_index in props_quant_array){
+							let de_index = match.props_quant.findIndex(i => i.id === props_quant_array[a_index].id );
+							if(de_index != -1){
+								match.props_quant.splice(de_index,1);
+								checksum++;
+							}
+						}
+					}
+					// result
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else{
+							// checking mechanism
+							if(checksum != props_quant_array.length){
+								callback(0,"not complete");
+							}
+							else{
+								callback(0,"success");
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+	user_furni_insertORupdate(name,pass,furni_quant_array,callback){
+		this.user_m.findOne({username: name, password: pass},'furni_quant',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"illegal account");
+				}
+				else{
+					// append 
+					if(furni_quant_array.length == 1){
+						let in_index = match.furni_quant.findIndex(i => i.id === furni_quant_array[0].id);
+						if(in_index == -1)
+							match.furni_quant.push(furni_quant_array[0]); // push this element
+						else
+							match.furni_quant[in_index] = furni_quant_array[0]; // update
+					}
+					else{
+						// concat array / insert array
+						for(var a_index in furni_quant_array){
+							let in_index = match.furni_quant.findIndex(i => i.id === furni_quant_array[a_index].id);
+							if(in_index == -1)
+								match.furni_quant.push(furni_quant_array[a_index]);
+							else
+								match.furni_quant[in_index] = furni_quant_array[a_index];
+						}
+					}
+					// deal saving
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_furni_delete(name,pass,furni_quant_array,callback){
+		this.user_m.findOne({username: name, password: pass},'furni_quant',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"illegal account");
+				}
+				else{
+					let checksum = 0;
+					if(furni_quant_array.length == 1){
+						// get elements index
+						let de_index = match.furni_quant.findIndex(i => i.id === furni_quant_array[0].id);
+						// delete
+						if(de_index != -1){
+							match.furni_quant.splice(de_index,1); 
+							checksum++;
+						}
+					}
+					else{
+						// delete total array
+						for(var a_index in furni_quant_array){
+							let de_index = match.furni_quant.findIndex(i => i.id === furni_quant_array[a_index].id );
+							if(de_index != -1){
+								match.furni_quant.splice(de_index,1);
+								checksum++;
+							}
+						}
+					}
+					// result
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else{
+							// checking mechanism
+							if(checksum != furni_quant_array.length){
+								callback(0,"not complete");
+							}
+							else{
+								callback(0,"success");
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+	user_favShop_set(name,pass,favShop_list,callback){
+		this.user_m.findOne({username: name,password: pass},'fav_shopID',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"illegal account");
+				}
+				else{
+					// setting 
+					match.fav_shopID = favShop_list;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_eventColl_set(name,pass,eventColl_list,callback){
+		this.user_m.findOne({username: name, password: pass},'event_coll',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"illegal account");
+				else{
+					// setting 
+					match.event_coll = eventColl_list;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else 
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_achieveColl_set(name,pass,achieveColl_list,callback){
+		this.user_m.findOne({username: name, password: pass},'achievement_coll',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"illegal account");
+				else{
+					// setting 
+					match.achievement_coll = achieveColl_list;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else 
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_charaColl_set(name,pass,charaColl_list,callback){
+		this.user_m.findOne({username: name, password: pass},'chara_coll',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"illegal account");
+				else{
+					// setting 
+					match.chara_coll = charaColl_list;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else 
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_streetView_set(name,pass,modeFlag,objFlag,infoFlag,callback){
+		this.user_m.findOne({username: name, password: pass},'gameMode gameObj infoObj',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"illegal account");
+				else{
+					// setting 
+					match.gameMode = modeFlag;
+					match.gameObj = objFlag;
+					match.infoObj = infoFlag;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else 
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	user_decoration_record(name,pass,decoration_record,callback){
+		this.user_m.findOne({username: name, password: pass},'decoration',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"illegal account");
+				else{
+					// setting 
+					match.decoration = decoration_record;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else 
+							callback(0,"success");
+					});
 				}
 			}
 		});
@@ -249,9 +536,9 @@ class DB {
 
 	shopInfo_update(shopID,password,shopName,shopAddress,openTime,infoList,callback){
 		// using shopName to fetch
-		var shop_model = new this.shop_m;
+		var shop_model = this.shop_m;
 		// verified 
-		this.owner_m.findOne({shopID: shopID, password: password, shopName: shopName},'',function(v_err,v_match){
+		this.owner_m.findOne({shopID: shopID, password: password},'',function(v_err,v_match){
 			if(v_err)
 				callback(1,"internal error");
 			else{
@@ -266,10 +553,7 @@ class DB {
 							callback(1,"internal error");
 						else{
 							if(match == null){
-								// not found 
-								callback(1,"not found");
-							}
-							else{
+								// not found , and create 
 								let newInfo = new shop_model({shopID: shopID,shopName: shopName,
 									shopAddress: shopAddress,openTime: openTime,infoList: infoList});
 								newInfo.save(function(err,newInfo){
@@ -277,6 +561,19 @@ class DB {
 										callback(1,"internal error");
 									else
 										callback(0,"success");
+								});
+							}
+							else{
+								// existed, and then update
+								match.shopAddress = shopAddress;
+								match.openTime = openTime;
+								match.infoList = infoList;
+								match.save(function(err,match){
+									if(err)
+										callback(1,"internal error");
+									else{
+										callback(0,"success");
+									}
 								});
 							}
 						}

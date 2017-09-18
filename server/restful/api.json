@@ -50,6 +50,107 @@
 					],
 				"error": "{\"result\":\"internal error\"} , {\"result\":\"illegal account\"}",
 				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] User Props information insert/update",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_props_insertORupdate",
+				"description": "針對使用者的裝備資訊做指定陣列的插入與更新",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"props_quant_array","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] User Props information delete",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_props_delete",
+				"description": "針對使用者的裝備資訊做指定陣列刪除",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"props_quant_array","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}, {\"result\":\"not complete\"}"
+			},
+			{
+				"usage": "[Online] User Furniture information insert/update",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_furni_insertORupdate",
+				"description": "針對使用者的傢俱資訊做指定陣列的插入與更新",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"furni_quant_array","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] User Furniture information delete",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_props_delete",
+				"description": "針對使用者的傢俱資訊做指定陣列刪除",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"furni_quant_array","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}, {\"result\":\"not complete\"}"
+			},
+			{
+				"usage": "[Online] Setting user Favorite shop list",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_favShop_set",
+				"description": "針對使用者的\"店家喜好清單\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"fav_shopID_list","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Setting user Event collection list",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_eventColl_set",
+				"description": "針對使用者的\"事件觸發紀錄\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"event_coll_list","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Setting user Achievement collection list",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_achieveColl_set",
+				"description": "針對使用者的\"成就紀錄\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"achieve_coll_list","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Setting user Character collection list",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_achieveColl_set",
+				"description": "針對使用者的\"角色圖鑑紀錄\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"chara_coll_list","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Setting user street mode control",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_streetView_set",
+				"description": "針對使用者的\"是否開啟街景模式\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"mode_flag","type":"Boolean"},{"name":"obj_flag","type":"Boolean"},
+					{"name":"info_flag","type":"Boolean"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Setting user decoration record",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_decoration_record",
+				"description": "針對使用者的\"遊戲畫面傢俱擺放紀錄\"做設定（注意！是直接置換新給予值的設定方式）",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
+					{"name":"decoration_record","type":"(stringified) JSON array"}],
+				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
 			}
 			]
 		},

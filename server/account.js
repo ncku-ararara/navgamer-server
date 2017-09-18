@@ -13,7 +13,16 @@ class UserService {
         app.get('/forget_pass',this.forget_pass);
         app.get('/verify_manual',this.verify_manual); // user get the mail , and then they can type it for themself
         app.post('/user_basicInfo_update',this.user_basicInfo_update);
-        app.post('/user_props_update',this.user_props_update);
+        app.post('/user_props_insertORupdate',this.user_props_insertORupdate);
+        app.post('/user_props_delete',this.user_props_delete);
+        app.post('/user_furni_insertORupdate',this.user_furni_insertORupdate);
+        app.post('/user_furni_delete',this.user_furni_delete);
+        app.post('/user_favShop_set',this.user_favShop_set);
+        app.post('/user_eventColl_set',this.user_eventColl_set);
+        app.post('/user_achieveColl_set',this.user_achieveColl_set);
+        app.post('/user_charaColl_set',this.user_charaColl_set);
+        app.post('/user_streetView_set',this.user_streetView_set);
+        app.post('/user_decoration_record',this.user_decoration_record);
         // about shop keeper register entries
         app.post('/register_shop',this.register_shop);
         app.post('/login_shop',this.login_shop);
@@ -68,8 +77,108 @@ class UserService {
         });
     }
 
-    user_props_update(req,res){
-        
+    user_props_insertORupdate(req,res){
+        const propsObj = req.body;
+        DB.user_props_insertORupdate(propsObj.username,propsObj.password,
+            JSON.parse(propsObj.props_quant_array),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_props_delete(req,res){
+        const propsObj = req.body;
+        DB.user_props_delete(propsObj.username,propsObj.password,
+            JSON.parse(propsObj.props_quant_array),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_furni_insertORupdate(req,res){
+        const furniObj = req.body;
+        DB.user_props_delete(furniObj.username,furniObj.password,
+            JSON.parse(furniObj.furni_quant_array),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_furni_delete(req,res){
+        const furniObj = req.body;
+        DB.user_props_delete(furniObj.username,furniObj.password,
+            JSON.parse(furniObj.furni_quant_array),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_favShop_set(req,res){
+        DB.user_favShop_set(req.body.username,req.body.password,
+            JSON.parse(req.body.fav_shopID_list),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else 
+                    res.end(msg);
+        });
+    }
+
+    user_eventColl_set(req,res){
+        DB.user_eventColl_set(req.body.username,req.body.password,
+            JSON.parse(req.body.event_coll_list),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else 
+                    res.end(msg);
+        });
+    }
+
+    user_achieveColl_set(req,res){
+        DB.user_achieveColl_set(req.body.username,req.body.password,
+            JSON.parse(req.body.achieve_coll_list),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_charaColl_set(req,res){
+        DB.user_achieveColl_set(req.body.username,req.body.password,
+            JSON.parse(req.body.chara_coll_list),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
+    }
+
+    user_streetView_set(req,res){
+        DB.user_streetView_set(req.body.username,req.body.password,req.body.mode_flag,
+            req.body.obj_flag,req.body.info_flag,function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+            });
+    }
+
+    user_decoration_record(req,res){
+        DB.user_decoration_record(req.body.username,req.body.password,
+            JSON.parse(req.body.decoration_record),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+        });
     }
 
     login(req,res){
@@ -274,7 +383,7 @@ class UserService {
         // need password to set shopinfo
         const infoBody = req.body;
         DB.shopInfo_update(infoBody.shopID,infoBody.password,infoBody.shopName,
-            infoBody.shopAddress,infoBody.openTime,infoBody.infoList,function(err,msg){
+            infoBody.shopAddress,JSON.parse(infoBody.openTime),JSON.parse(infoBody.infoList),function(err,msg){
                 if(err)
                     res.end(msg);
                 else
