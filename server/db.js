@@ -671,8 +671,11 @@ class DB {
 			});
 	}
 
-	user_fetch(username,callback){
-		this.user_m.findOne({username: name},'username email',function(err,match){
+	user_fetch(name,callback){
+		this.user_m.findOne({username: name},'username email current_charID value_strength \
+			value_intelligence value_like value_money value_playTime_hr value_level \
+			props_quant furni_quant fav_shopID event_coll achievement_coll chara_startTime \
+			chara_coll gameMode gameObj infoObj decoration',function(err,match){
 			if(err){
 				callback(1,"internal error");
 			}

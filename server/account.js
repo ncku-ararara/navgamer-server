@@ -23,6 +23,7 @@ class UserService {
         app.post('/user_charaColl_set',this.user_charaColl_set);
         app.post('/user_streetView_set',this.user_streetView_set);
         app.post('/user_decoration_record',this.user_decoration_record);
+        app.get('/get_userInfo',this.get_userInfo);
         // about shop keeper register entries
         app.post('/register_shop',this.register_shop);
         app.post('/login_shop',this.login_shop);
@@ -178,6 +179,15 @@ class UserService {
                     res.end(msg);
                 else
                     res.end(msg);
+        });
+    }
+
+    get_userInfo(req,res){
+        DB.user_fetch(req.query.username,function(err,msg){
+            if(err)
+                res.end(msg);
+            else
+                res.end(JSON.stringify(msg));
         });
     }
 

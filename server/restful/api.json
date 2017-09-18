@@ -151,6 +151,14 @@
 					{"name":"decoration_record","type":"(stringified) JSON array"}],
 				"error": "{\"result\":\"illegal account\"} , {\"result\":\"internal error\"}",
 				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Fetch all information from user",
+				"method": "GET",
+				"url": "https://kevin.imslab.org/get_userInfo?username=...",
+				"description": "取得一名使用者所有公開資訊",
+				"error": "{\"result\":\"wrong account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\": long stringified json object"
 			}
 			]
 		},
