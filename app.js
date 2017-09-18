@@ -27,6 +27,14 @@ app_s.use(bodyParser.urlencoded({
 app_s.use(bodyParser.json());
 
 /* redirect & static link */
+// for http
+app.set('views',path.join(__dirname,'client/views'));
+app.use(express.static(path.join(__dirname,'client/elements')));
+app.use(express.static(path.join(__dirname,'client/images')));
+app.use(express.static(path.join(__dirname,'client/css')));
+app.use(express.static(path.join(__dirname,'client/js')));
+app.use(express.static(path.join(__dirname,'client/lib')));
+// for https
 app_s.set('views',path.join(__dirname,'client/views'));
 app_s.use(express.static(path.join(__dirname,'client/elements')));
 app_s.use(express.static(path.join(__dirname,'client/images')));
@@ -42,17 +50,18 @@ var options = {
 
 /* Initialize all module */
 /* Need to separate "Secure service" & "Download Service" */
-
-
 const secure_server = https.createServer(options,app_s);
 const download_server = http.createServer(app);
 
 /* Both (Secure & Download), often for testbed or introduction */
 Debugger.init(app);
 Debugger.init(app_s);
+IntroService.init(app);
 IntroService.init(app_s);
-/* Special for https */
+UserService.init(app);
 UserService.init(app_s);
+
+/* Special for https */
 IO.init(secure_server);
 IOService.init(app_s);
 

@@ -13,9 +13,13 @@
 	<!-- Purpose -->
 	<h2> NavGamer RESTful API Document </h2>
 	<hr>
+	快速跳轉到: 
+	<% for(var index in api.parts){ %>
+		<a href="#<%= api.parts[index] %>-part"><button class="btn btn-danger" type="button"><%= api.parts[index] %></button></a>
+	<% } %>
 	<h5> <%= api.version %> </h5>
 	<!-- User Part -->
-	<div class="panel-group">
+	<div id="User-part" class="panel-group">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span class="glyphicon glyphicon-triangle-right"><span> User 
@@ -73,6 +77,128 @@
 			</div>
 		</div>
 	</div><!-- User Part -->
+	<hr>
+
+	<!-- Shop Keeper(owner) Part -->
+	<div id="Owner-part" class="panel-group">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-triangle-right"><span> Owner 
+			</div>
+			<div class="panel-body">
+				<!-- Each part here --> 
+				<% for(var index in api.owner){ %>
+					<!-- URL goes here -->
+					<h4> URL: </h4>
+					<div class="input-group">
+						<span class="input-group-btn">
+						<% if(api.owner[index].method == "GET"){ %>
+							<button class="btn btn-success" type="button"><%= api.owner[index].method %></button>
+						<% }else if(api.owner[index].method == "POST"){ %>
+							<button class="btn btn-info" type="button"><%= api.owner[index].method %></button>
+						<% } %>
+						</span>
+						<span class="input-group-addon"><i class="fa fa-code" aria-hidden="true"></i><strong> <%= api.owner[index].usage %> </strong></span>
+						<input type="text" class="form-control" placeholder="user-add" aria-describedby="basic-addon1" value="<%= api.owner[index].url %>" readonly="true">
+					</div>
+					<br>
+					<!-- Description -->
+					<h4> Description: </h4> 
+					<pre><%= api.owner[index].description %></pre>
+					<!-- Field Parameter goes here -->
+					<h4> Field (Parameter): </h4>
+					<ol>
+						<% if(api.owner[index].method == "POST"){ %>
+						<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Field Name</th>
+								<th>Field Type</th>
+							</tr>
+							</thead>
+						<tbody>
+						<% for(var v_index in api.owner[index].field){ %>
+						<tr>
+							<td><kbd class="field"><%= api.owner[index].field[v_index].name %></kbd></td>
+							<td><%= api.owner[index].field[v_index].type %></td>
+						</tr>
+						<% } %>
+						</tbody>
+						</table>
+						<% } %>
+					</ol>
+					<!-- Server Response goes here -->
+					<h4> Server Response: </h4>
+					<hr>
+					<ul> Error: <kbd><%= api.owner[index].error %></kbd> </ul>
+					<br>
+					<ul> Success: <kbd><%= api.owner[index].success %></kbd> </ul>
+					<hr>
+				<% } %>
+			</div>
+		</div>
+	</div><!-- Owner Part -->
+	<hr>
+
+	<!-- Dev(Debug) Part -->
+	<div id="Debug-part" class="panel-group">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="glyphicon glyphicon-triangle-right"><span> Debug (開發中、測試使用)
+			</div>
+			<div class="panel-body">
+				<!-- Each part here --> 
+				<% for(var index in api.debug){ %>
+					<!-- URL goes here -->
+					<h4> URL: </h4>
+					<div class="input-group">
+						<span class="input-group-btn">
+						<% if(api.debug[index].method == "GET"){ %>
+							<button class="btn btn-success" type="button"><%= api.debug[index].method %></button>
+						<% }else if(api.debug[index].method == "POST"){ %>
+							<button class="btn btn-info" type="button"><%= api.debug[index].method %></button>
+						<% } %>
+						</span>
+						<span class="input-group-addon"><i class="fa fa-code" aria-hidden="true"></i><strong> <%= api.debug[index].usage %> </strong></span>
+						<input type="text" class="form-control" placeholder="user-add" aria-describedby="basic-addon1" value="<%= api.debug[index].url %>" readonly="true">
+					</div>
+					<br>
+					<!-- Description -->
+					<h4> Description: </h4> 
+					<pre><%= api.debug[index].description %></pre>
+					<!-- Field Parameter goes here -->
+					<h4> Field (Parameter): </h4>
+					<ol>
+						<% if(api.debug[index].method == "POST"){ %>
+						<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Field Name</th>
+								<th>Field Type</th>
+							</tr>
+							</thead>
+						<tbody>
+						<% for(var v_index in api.debug[index].field){ %>
+						<tr>
+							<td><kbd class="field"><%= api.debug[index].field[v_index].name %></kbd></td>
+							<td><%= api.debug[index].field[v_index].type %></td>
+						</tr>
+						<% } %>
+						</tbody>
+						</table>
+						<% } %>
+					</ol>
+					<!-- Server Response goes here -->
+					<h4> Server Response: </h4>
+					<hr>
+					<ul> Error: <kbd><%= api.debug[index].error %></kbd> </ul>
+					<br>
+					<ul> Success: <kbd><%= api.debug[index].success %></kbd> </ul>
+					<hr>
+				<% } %>
+			</div>
+		</div>
+	</div><!-- Dev(Debug) Part -->
 	<hr>
 </div>
 </body>

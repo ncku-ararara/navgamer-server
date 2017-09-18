@@ -1,0 +1,5 @@
+請使用下列特殊格式的網址，並搭配使用您手邊的任何瀏覽器來找尋您的使用者密碼
+
+格式: https://kevin.imslab.org(:4000)/verify_manual_shop?shopID=您的帳號&code=下方的密鑰
+
+密鑰: (下封信件)
