@@ -1,177 +1,212 @@
 {
-	"version": "v0.0.1",
-	"parts": [
-		"User","Owner","Debug"
-	],
-	"user": [
+	"version": "v0.0.2",
+	"tags":[
 		{
-			"usage": "[Online] Register New User",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/register",
-			"description": "註冊一組新的使用者",
-			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},{"name":"email","type":"String"} ],
-			"error": "{\"result\":\"duplicated\"} , {\"result\":\"internal error\"}",
-			"success": "{\"result\":\"success\"}"
+			"name": "User",
+			"description": "Dealing with all operation about user.",
+			"body": [
+			{
+				"usage": "[Online] Register New User",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/register",
+				"description": "註冊一組新的使用者",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},{"name":"email","type":"String"} ],
+				"error": "{\"result\":\"duplicated\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Checking mail",
+				"method": "GET",
+				"url": "https://kevin.imslab.org/checkmail?email=...",
+				"description": "測試該信箱是否已經被使用",
+				"error": "{\"result\":\"internal error\"}",
+				"success": "{\"result\":\"existed\"} ,{\"result\":\"not found\"}"
+			},
+			{
+				"usage": "[Online] User Login",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/login",
+				"description": "合法的使用者登入",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"}],
+				"error": "{\"result\":\"login failed\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
+			},
+			{
+				"usage": "[Online] Recovery for the forgotten password",
+				"method": "GET",
+				"url": "https://kevin.imslab.org/forget_pass?shopID=...",
+				"description": "遺忘密碼時觸發補救辦法",
+				"error": "{\"result\":\"wrong account\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\": (JSON format) {\"email: u_email\",\"code: generate-code\"}}"
+			},
+			{
+				"usage": "[Online] User Basic information update",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/user_basicInfo_update",
+				"description": "針對使用者的基本資料做設定",
+				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"}, {"name":"charID","type":"String"},
+						{"name":"strength", "type":"Number"},{"name":"intelligence","type":"Number"},{"name":"like","type":"Number"},
+						{"name":"money","type":"Number"},{"name":"hour","type":"Number"},{"name":"level","type":"Number"}
+					],
+				"error": "{\"result\":\"internal error\"} , {\"result\":\"illegal account\"}",
+				"success": "{\"result\":\"success\"}"
+			}
+			]
 		},
 		{
-			"usage": "[Online] Checking mail",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/checkmail?email=...",
-			"description": "測試該信箱是否已經被使用",
-			"error": "{\"result\":\"internal error\"}",
-			"success": "{\"result\":\"existed\"} ,{\"result\":\"not found\"}"
+			"name": "Owner",
+			"description": "",
+			"body":[
+				{
+					"usage": "[Online] Register New User",
+					"method": "POST",
+					"url": "https://kevin.imslab.org/register_shop",
+					"description": "註冊一組新的商家使用者(shopID,shopName 必須唯一)",
+					"field": [ {"name":"shopID","type":"String"},{"name":"password","type":"String"},
+						{"name":"email","type":"String"},{"name":"phone", "type":"String"},
+						{"name":"shopName", "type":"String"}, {"name":"shopAddress", "type":"String"},
+						{"name":"category_1", "type":"Integer"}, {"name":"category_2", "type":"Integer"},
+						{"name":"shop_principal", "type":"String"}, {"name":"shop_principal_gender","type":"Integer"},
+						{"name":"shop_principal_phone", "type":"String"}, {"name": "shop_principal_email", "type":"String"}
+					],
+					"error": "{\"result\":\"duplicated shopID\"}, {\"result\":\"duplicated shopName\"} , {\"result\":\"internal error\"}",
+					"success": "{\"result\":\"success\"}"
+				},{
+					"usage": "[Online] Shop Owner Login",
+					"method": "POST",
+					"url": "https://kevin.imslab.org/login_shop",
+					"description": "商家使用者登入(注意！這邊使用的是當初註冊使用的帳號，非店家名稱！)",
+					"field": [ {"name": "shopID", "type":"String"},{"name":"password","type":"String"} ],
+					"error": "{\"result\":\"login failed\"} , {\"result\":\"internal failed\"}",
+					"success": "{\"result\":\"success\"}"
+				},
+				{
+					"usage": "[Online] Recovery for the forgotten password (For owner)",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/forget_pass_shop?shopID=....",
+					"description": "遺忘密碼時觸發補救辦法(注意！這邊輸入的是當初註冊用的帳號，並非店家名稱！)",
+					"error": "{\"result\":\"wrong shopID\"} , {\"result\":\"internal error\"}",
+					"success": "{\"result\": (JSON format) {\"email: u_email\",\"code: generate-code\"}}"
+				},
+				{
+					"usage": "[Online] Checking mail (For owner)",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/checkmail?email=....",
+					"description": "測試該信箱是否已經被使用",
+					"error": "{\"result\":\"internal error\"}",
+					"success": "{\"result\": \"not found\" }, {\"result\": \"existed\" }"
+				},
+				{
+					"usage": "[Online] Convert from shopName to shopID",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/shopName2shopID?shopName=...",
+					"description": "透過商家名稱來查詢註冊者的ID",
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
+					"success": "{\"result\": \"existed\" }"
+				},
+				{
+					"usage": "[Online] Set shop business Information",
+					"method": "POST",
+					"url": "https://kevin.imslab.org/set_shopInfo",
+					"description": "一個店家設定其所擁有的店面\"關於營業\"的所有公開資訊 (See more on \"https://hackmd.io/s/rJgtaO9tW\") ",
+					"field": [{"name":"shopID","type":"String"},{"name":"password","type":"String"},{"name":"shopName","type":"String"},
+						{"name":"shopAddress","type":"String"},{"name":"openTime","type":"[{ open: Boolean, timePeriod: [{begin_hr: String,begin_min: String,end_hr: String,end_min: String}] }]"},{"name":"infoList","type":"[{title: String,content: String}]"}],
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"illegal account\" }, {\"result\": \"not found\" }",
+					"success": "{\"result\": \"success\" }"
+				},
+				{
+					"usage": "[Online] Fetch shop business Information",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_shopInfo?shopID=...",
+					"description": "獲得一個店家\"關於營業\"的所有公開資訊 (See more on \"https://hackmd.io/s/rJgtaO9tW\") ",
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
+					"success": "{\"result\": \"Stringified JSON object\" }"
+				},
+				{
+					"usage": "[Online] Fetch shop owner Information",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_shopOwnerInfo?shopID=...",
+					"description": "獲得一個店家\"擁有者\"的所有公開資訊",
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"wrong shopID\" }",
+					"success": "{\"result\": \"Stringified JSON Object(Same format as registeration)\" }"
+				},
+				{
+					"usage": "[Online] Upload Comment",
+					"method": "POST",
+					"url": "https://kevin.imslab.org/upload_comment",
+					"description": "發表對一個商家的評論",
+					"field": [ {"name": "userID","type":"String"},{"name": "shopID","type":"String"},{"name": "text_content","type":"String"}
+						,{"name": "picture","type":"Binary file"},{"name": "time","type":"String(any Date format)"},{"name": "score","type": "Integer(1~5)"} ],
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"duplicated\" }",
+					"success": "{\"result\": \"success\" }"
+				},
+				{
+					"usage": "[Online] Download Comment",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_shopComm?shopID=...",
+					"description": "抓取所有對於該店家的評論",
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"none\" }",
+					"success": "{\"result\": \"Stringified JSON Object(Same format as upload comment)\" }"
+				}
+			]
 		},
 		{
-			"usage": "[Online] User Login",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/login",
-			"description": "合法的使用者登入",
-			"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"}],
-			"error": "{\"result\":\"login failed\"} , {\"result\":\"internal error\"}",
-			"success": "{\"result\":\"success\"}"
+			"name": "ADF",
+			"description": "",
+			"body": [
+				{
+					"usage": "[Debug] Download Adf File",
+					"method": "GET",
+					"url": "http://kevin.imslab.org/adf_g?id=...",
+					"description": "下載相對應 beacon ID 的 adf 檔案； https 也同樣支援！",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+					"success": "{\"result\":\"success\"}"
+				},
+				{
+					"usage": "[Debug] Setting Beacon ID & ADF",
+					"method": "GET",
+					"url": "http://kevin.imslab.org/adf_s?id=...&path=...&loc=...",
+					"description": "修改特定的 beacon ID 對應到的相依資料",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+					"success": "{\"result\":\"success\"}"
+				}
+			]
 		},
 		{
-			"usage": "[Online] Recovery for the forgotten password",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/forget_pass?shopID=...",
-			"description": "遺忘密碼時觸發補救辦法",
-			"error": "{\"result\":\"wrong account\"} , {\"result\":\"internal error\"}",
-			"success": "{\"result\": (JSON format) {\"email: u_email\",\"code: generate-code\"}}"
+			"name": "Chatbot",
+			"description": "",
+			"body": [
+				{
+					"usage": "[Online] Chatbot usage",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/chatroom?room_name=...&name=...",
+					"description": "跟 chatbot 在聊天室頻道做互動",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+					"success": "{\"result\":\"success\"}"
+				},
+				{
+					"usage": "[Debug] Get Chatbot response",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/chatbot?str=...",
+					"description": "取得一次 chatbot 的回覆訊息",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+					"success": "{\"result\":\"success\"}"
+				}
+			]
 		},
 		{
-			"usage": "[Debug] Download Adf File",
-			"method": "GET",
-			"url": "http://kevin.imslab.org/adf_g?id=...",
-			"description": "下載相對應 beacon ID 的 adf 檔案； https 也同樣支援！",
-			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-			"success": "{\"result\":\"success\"}"
-		},
-		{
-			"usage": "[Debug] Setting Beacon ID & ADF",
-			"method": "GET",
-			"url": "http://kevin.imslab.org/adf_s?id=...&path=...&loc=...",
-			"description": "修改特定的 beacon ID 對應到的相依資料",
-			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-			"success": "{\"result\":\"success\"}"
-		},
-		{
-			"usage": "[Online] Chatbot usage",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/chatroom?room_name=...&name=...",
-			"description": "跟 chatbot 在聊天室頻道做互動",
-			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-			"success": "{\"result\":\"success\"}"
-		},
-		{
-			"usage": "[Debug] Get Chatbot response",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/chatbot?str=...",
-			"description": "取得一次 chatbot 的回覆訊息",
-			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-			"success": "{\"result\":\"success\"}"
-		}
-	],
-	"owner":[
-		{
-			"usage": "[Online] Register New User",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/register_shop",
-			"description": "註冊一組新的商家使用者(shopID,shopName 必須唯一)",
-			"field": [ {"name":"shopID","type":"String"},{"name":"password","type":"String"},
-				{"name":"email","type":"String"},{"name":"phone", "type":"String"},
-				{"name":"shopName", "type":"String"}, {"name":"shopAddress", "type":"String"},
-				{"name":"category_1", "type":"Integer"}, {"name":"category_2", "type":"Integer"},
-				{"name":"shop_principal", "type":"String"}, {"name":"shop_principal_gender","type":"Integer"},
-				{"name":"shop_principal_phone", "type":"String"}, {"name": "shop_principal_email", "type":"String"}
-			],
-			"error": "{\"result\":\"duplicated shopID\"}, {\"result\":\"duplicated shopName\"} , {\"result\":\"internal error\"}",
-			"success": "{\"result\":\"success\"}"
-		},{
-			"usage": "[Online] Shop Owner Login",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/login_shop",
-			"description": "商家使用者登入(注意！這邊使用的是當初註冊使用的帳號，非店家名稱！)",
-			"field": [ {"name": "shopID", "type":"String"},{"name":"password","type":"String"} ],
-			"error": "{\"result\":\"login failed\"} , {\"result\":\"internal failed\"}",
-			"success": "{\"result\":\"success\"}"
-		},
-		{
-			"usage": "[Online] Recovery for the forgotten password (For owner)",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/forget_pass_shop?shopID=....",
-			"description": "遺忘密碼時觸發補救辦法(注意！這邊輸入的是當初註冊用的帳號，並非店家名稱！)",
-			"error": "{\"result\":\"wrong shopID\"} , {\"result\":\"internal error\"}",
-			"success": "{\"result\": (JSON format) {\"email: u_email\",\"code: generate-code\"}}"
-		},
-		{
-			"usage": "[Online] Checking mail (For owner)",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/checkmail?email=....",
-			"description": "測試該信箱是否已經被使用",
-			"error": "{\"result\":\"internal error\"}",
-			"success": "{\"result\": \"not found\" }, {\"result\": \"existed\" }"
-		},
-		{
-			"usage": "[Online] Convert from shopName to shopID",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/shopName2shopID?shopName=...",
-			"description": "透過商家名稱來查詢註冊者的ID",
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
-			"success": "{\"result\": \"existed\" }"
-		},
-		{
-			"usage": "[Online] Set shop business Information",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/set_shopInfo",
-			"description": "一個店家設定其所擁有的店面\"關於營業\"的所有公開資訊 (See more on \"https://hackmd.io/s/rJgtaO9tW\") ",
-			"field": [{"name":"shopID","type":"String"},{"name":"password","type":"String"},{"name":"shopName","type":"String"},
-				{"name":"shopAddress","type":"String"},{"name":"openTime","type":"[{ open: Boolean, timePeriod: [{begin_hr: String,begin_min: String,end_hr: String,end_min: String}] }]"},{"name":"infoList","type":"[{title: String,content: String}]"}],
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"illegal account\" }, {\"result\": \"not found\" }",
-			"success": "{\"result\": \"success\" }"
-		},
-		{
-			"usage": "[Online] Fetch shop business Information",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/get_shopInfo?shopID=...",
-			"description": "獲得一個店家\"關於營業\"的所有公開資訊 (See more on \"https://hackmd.io/s/rJgtaO9tW\") ",
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
-			"success": "{\"result\": \"Stringified JSON object\" }"
-		},
-		{
-			"usage": "[Online] Fetch shop owner Information",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/get_shopOwnerInfo?shopID=...",
-			"description": "獲得一個店家\"擁有者\"的所有公開資訊",
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"wrong shopID\" }",
-			"success": "{\"result\": \"Stringified JSON Object(Same format as registeration)\" }"
-		},
-		{
-			"usage": "[Online] Upload Comment",
-			"method": "POST",
-			"url": "https://kevin.imslab.org/upload_comment",
-			"description": "發表對一個商家的評論",
-			"field": [ {"name": "userID","type":"String"},{"name": "shopID","type":"String"},{"name": "text_content","type":"String"}
-				,{"name": "picture","type":"Binary file"},{"name": "time","type":"String(any Date format)"},{"name": "score","type": "Integer(1~5)"} ],
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"duplicated\" }",
-			"success": "{\"result\": \"success\" }"
-		},
-		{
-			"usage": "[Online] Download Comment",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/get_shopComm?shopID=...",
-			"description": "抓取所有對於該店家的評論",
-			"error": "{\"result\":\"internal error\"}, {\"result\": \"none\" }",
-			"success": "{\"result\": \"Stringified JSON Object(Same format as upload comment)\" }"
-		}
-	],
-	"debug": [
-		{
-			"usage": "[Debug] List out all ADF usage",
-			"method": "GET",
-			"url": "https://kevin.imslab.org/adf",
-			"description": "列出目前使用的 adf 分佈情況",
-			"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-			"success": "{\"result\":\"success\"}"
+			"name": "Template",
+			"description": "",
+			"body": [
+				{
+					"usage": "[Template] Template of doc page format - GET method.",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/<pathname>?<params ... >",
+					"description": "<說明該 url 使用的目的>",
+					"error": "{\"result\":\"錯誤訊息\"}, {\"result\":\"更多錯誤訊息\"}",
+					"success": "{\"result\":\"成功訊息\"}"
+				}
+			]
 		}
 	]
 }

@@ -567,10 +567,10 @@ class DB {
 				callback(1,"internal error");
 			else{
 				if(matchs == null){
-					callback(0,"none");
+					callback(1,"none");
 				}
 				else{
-					callback(1,matchs); // return all entries
+					callback(0,matchs); // return all entries
 				}
 			}
 		});

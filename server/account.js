@@ -249,20 +249,6 @@ class UserService {
                 res.end(msg); // now msg = shopID (which has been found)
         });
     }
-
-    // about user comment
-    upload_comment(req,res){
-        // userID, shopID, text_content, picture(binary), time, score
-        const commBody = req.body;
-        DB.add_comment(commBody.userID,commBody.shopID,commBody.text_content,
-            commBody.picture,commBody.time,commBody.score,
-            function(err,msg){
-                if(err)
-                    res.end(msg);
-                else 
-                    res.end(msg);
-            });
-    }
     
     get_shopOwnerInfo(req,res){
         // using shopID to get information of shop owner information (distinguish from comment)
@@ -294,6 +280,20 @@ class UserService {
                 else
                     res.end(msg);
             })
+    }
+
+    // about user comment
+    upload_comment(req,res){
+        // userID, shopID, text_content, picture(binary), time, score
+        const commBody = req.body;
+        DB.add_comment(commBody.userID,commBody.shopID,commBody.text_content,
+            commBody.picture,commBody.time,commBody.score,
+            function(err,msg){
+                if(err)
+                    res.end(msg);
+                else 
+                    res.end(msg);
+            });
     }
 
     get_shopComm(req,res){
