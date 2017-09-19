@@ -342,13 +342,39 @@
 				{
 					"usage": "[Online] Download adf with specific target ID",
 					"method": "GET",
-					"url": "http://kevin.imslab.org/get_adf",
+					"url": "http://kevin.imslab.org/get_adf?beaconID=...&adfID=...",
 					"description": "向 server 的特定儲存空間要求下載對應的 adf 檔",
-					"field":[
-						{"name": "beaconID", "type": "String"},{"name": "adfID","type": "String"}
-					],
 					"error": "{\"result\":\"error ID\"}, {\"result\":\"error\"}",
 					"success": "file download require( 跳出視窗來做詢問的下載要求 )"
+				},
+				{
+					"usage": "[Online] Add adf obj in specific location",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/add_obj",
+					"description": "把相關的物件檔案(.prefab)儲存進相對應的商家儲存空間",
+					"field":[
+						{"name": "beaconID", "type": "String"},{"name": "adfID","type": "String"},
+						{"name": "shopID", "type":"String"},{"name":"id","type":"String"},
+						{"name": "pos","type":"String"},{"name":"rot","type":"String"}
+					],
+					"error": "{\"result\":\"error ID\"}, {\"result\":\"error\"}, {\"result\":\"illegal account\"}",
+					"success": "{\"result\":\"create\"}, {\"result\":\"update\"}"
+				},
+				{
+					"usage": "[Online] Get adf obj file",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_obj_file?beaconID=...&adfID=...&shopID=...&id=...",
+					"description": "下載對應 ID 底下的特定 adf 相依物件",
+					"error": "{\"result\":\"error ID\"}, {\"result\": \"error\" }",
+					"success": "file download require( 跳出視窗來做詢問的下載要求 )"
+				},
+				{
+					"usage": "[Online] Get adf obj information ( pos , rot )",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_obj_info?beaconID=...&adfID=...&shopID=...&id=...",
+					"description": "下載對應 ID 底下的特定 adf 相依物件的資料屬性（注意！這邊回傳的是當初傳進去的字串，若當時傳入的時候是錯的，那麼拿出來也會是錯的！）",
+					"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
+					"success": "(Stringified) json object"
 				}
 			]
 		},

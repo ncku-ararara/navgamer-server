@@ -33,6 +33,10 @@ class AdfService {
         // upload/download adf data 
         app.post('/add_adf',upload.single('file'),this.add_adf);
         app.get('/get_adf',this.get_adf);
+        // store object into specific shop
+        app.post('/add_obj',upload.single('file'),this.add_obj);
+        app.get('/get_obj_file',this.get_obj_file);
+        app.get('/get_obj_info',this.get_obj_info);
     }
 
     create_beaconID(req,res){
@@ -79,20 +83,22 @@ class AdfService {
         if(req.body.shopID == undefined || req.body.password == undefined || req.body.auth_flag == undefined || req.body.beaconID == undefined || req.body.adfID == undefined){
             res.end("error input format");
         }
-        DB.set_adf_shopID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
-            function(err,msg){
-                if(err)
-                    res.end(msg);
-                else{
-                    // create folder 
-                    mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID),function(err){
-                        if(err)
-                            res.end("create folder error");
-                        else 
-                            res.end(msg); // fully success
-                    });
-                }
-        });
+        else{
+            DB.set_adf_shopID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
+                function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else{
+                        // create folder 
+                        mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID),function(err){
+                            if(err)
+                                res.end("create folder error");
+                            else 
+                                res.end(msg); // fully success
+                        });
+                    }
+                });
+        }
     }
 
     add_adf(req,res){
@@ -105,9 +111,10 @@ class AdfService {
                 if(exists == false)
                     res.end("error ID");
                 else{
-                    // moving files
+                    // moving files (overwrite)
                     fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
-                        path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.adfID+".adf"))
+                        path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.adfID+".adf")
+                        ,{ overwrite: true })
                         .then(() => {
                             res.end("uploaded");
                         })
@@ -127,6 +134,58 @@ class AdfService {
                 res.download(file);
         }).catch( err => {
             res.end("error");
+        });
+    }
+
+    add_obj(req,res){
+        // check 
+        var file = path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID);
+        fsx.pathExists(file).then(exists => {
+            if(exists == false)
+                res.end("error ID");
+            else{
+                // moving files (overwrite if the file is already existed)
+                fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
+                        path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.shopID,req.body.id),
+                        { overwrite: true })
+                        .then(() => {
+                            // add info obj into shop
+                            DB.add_adf_obj(req.body.shopID,req.body.password,req.body.id,
+                                req.body.beaconID,req.body.adfID,req.body.pos,
+                                req.body.rot,function(err,msg){
+                                    if(err)
+                                        res.end(msg);
+                                    else
+                                        res.end(msg);
+                            });
+                        })
+                        .catch( err => {
+                            res.end("error");
+                        });
+            }
+        }).catch( err => {
+            res.end("error");
+        });
+    }
+
+    get_obj_file(req,res){
+        var file = path.join(__dirname,'..','ararara-download',req.query.beaconID,req.query.adfID,req.query.shopID,req.query.id);
+        fsx.pathExists(file).then(exists => {
+            if(exists == false)
+                res.end("error ID");
+            else
+                res.download(file);
+        }).catch( err => {
+            res.end("error");
+        });
+    }
+
+    get_obj_info(req,res){
+        DB.get_adf_obj(req.query.id,req.query.beaconID,req.query.adfID,req.query.shopID,function(err,msg){
+            if(err)
+                res.end(msg);
+            else
+                res.end(JSON.stringify(msg));
         });
     }
 }

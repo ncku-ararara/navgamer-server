@@ -113,12 +113,21 @@ class DB {
 			adfID: [ { name: String } ],
 			shopID: [ { name: String } ]
 		});
+		this.adfObjSchema = mongoose.Schema({
+			id: String,
+			beaconID: String,
+			adfID: String,
+			shopID: String,
+			pos: String,
+			rot: String
+		});
 		// define schema model
 		this.user_m = mongoose.model('user_m',this.userSchema);
 		this.owner_m = mongoose.model('owner_m',this.shopKeeperSchema);
 		this.shop_m = mongoose.model('shop_m',this.shopInfoSchema);
 		this.comm_m = mongoose.model('comm_m',this.commentSchema);
 		this.adf_m = mongoose.model('adf_m',this.adfSchema);
+		this.adfobj_m = mongoose.model('adfobj_m',this.adfObjSchema);
 	}
 	// user-defined function
 	user_register(name,pass,email,callback){
@@ -1223,6 +1232,65 @@ class DB {
 				}
 			}
 		});
+	}
+
+	add_adf_obj(name,pass,id,beaconID,adfID,pos,rot,callback){
+		var obj_model = this.adfobj_m;
+
+		this.owner_m.findOne({shopID: name, password: pass},'',function(err,m_user){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(m_user == null)
+					callback(1,"illegal account");
+				else{
+					// exist owner
+					obj_model.findOne({id: id,beaconID: beaconID,adfID: adfID,shopID: name},'pos rot',function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else{
+							if(match == null){
+								// create 
+								let newObj = new obj_model({id: id,beaconID: beaconID,adfID: adfID,shopID: name,pos: pos,rot: rot});
+								newObj.save(function(err,newObj){
+									if(err)
+										callback(1,"internal error");
+									else
+										callback(0,"create");
+								});
+							}
+							else{
+								// this object exist, update
+								match.pos = pos;
+								match.rot = rot;
+								match.save(function(err,match){
+									if(err)
+										callback(1,"internal error");
+									else
+										callback(0,"update");
+								});
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+	get_adf_obj(id,beaconID,adfID,shopID,callback){
+		this.adfobj_m.findOne({id: id,beaconID: beaconID,adfID: adfID,shopID: shopID},
+			'id beaconID adfID shopID pos rot',function(err,match){
+				if(err)
+					callback(1,"internal error");
+				else{
+					if(match == null){
+						callback(1,"not found");
+					}
+					else{
+						callback(0,match);
+					}
+				}
+			});
 	}
 }
 
