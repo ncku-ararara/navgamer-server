@@ -118,8 +118,11 @@ class DB {
 			beaconID: String,
 			adfID: String,
 			shopID: String,
+			shopName: String,
+			shopIntro: String,
 			pos: String,
-			rot: String
+			rot: String,
+			scale: String
 		});
 		// define schema model
 		this.user_m = mongoose.model('user_m',this.userSchema);
@@ -1234,7 +1237,7 @@ class DB {
 		});
 	}
 
-	add_adf_obj(name,pass,id,beaconID,adfID,pos,rot,callback){
+	add_adf_obj(name,pass,shopName,shopIntro,id,beaconID,adfID,pos,rot,scale,callback){
 		var obj_model = this.adfobj_m;
 
 		this.owner_m.findOne({shopID: name, password: pass},'',function(err,m_user){
@@ -1245,13 +1248,13 @@ class DB {
 					callback(1,"illegal account");
 				else{
 					// exist owner
-					obj_model.findOne({id: id,beaconID: beaconID,adfID: adfID,shopID: name},'pos rot',function(err,match){
+					obj_model.findOne({id: id,beaconID: beaconID,adfID: adfID,shopID: name},'shopName pos rot scale',function(err,match){
 						if(err)
 							callback(1,"internal error");
 						else{
 							if(match == null){
 								// create 
-								let newObj = new obj_model({id: id,beaconID: beaconID,adfID: adfID,shopID: name,pos: pos,rot: rot});
+								let newObj = new obj_model({id: id,shopName: shopName,shopIntro: shopIntro,beaconID: beaconID,adfID: adfID,shopID: name,pos: pos,rot: rot,scale: scale});
 								newObj.save(function(err,newObj){
 									if(err)
 										callback(1,"internal error");
@@ -1263,6 +1266,9 @@ class DB {
 								// this object exist, update
 								match.pos = pos;
 								match.rot = rot;
+								match.scale = scale;
+								match.shopName = shopName;
+								match.shopIntro = shopIntro;
 								match.save(function(err,match){
 									if(err)
 										callback(1,"internal error");
@@ -1279,7 +1285,7 @@ class DB {
 
 	get_adf_obj(id,beaconID,adfID,shopID,callback){
 		this.adfobj_m.findOne({id: id,beaconID: beaconID,adfID: adfID,shopID: shopID},
-			'id beaconID adfID shopID pos rot',function(err,match){
+			'id shopName shopIntro beaconID adfID shopID pos rot scale',function(err,match){
 				if(err)
 					callback(1,"internal error");
 				else{

@@ -151,8 +151,8 @@ class AdfService {
                         .then(() => {
                             // add info obj into shop
                             DB.add_adf_obj(req.body.shopID,req.body.password,req.body.id,
-                                req.body.beaconID,req.body.adfID,req.body.pos,
-                                req.body.rot,function(err,msg){
+                                req.body.shopName,req.body.shopIntro,req.body.beaconID,
+                                req.body.adfID,req.body.pos,req.body.rot,req.body.scale,function(err,msg){
                                     if(err)
                                         res.end(msg);
                                     else

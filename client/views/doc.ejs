@@ -14,9 +14,10 @@
 	<h2> NavGamer RESTful API Document </h2>
 	<hr>
 	快速跳轉到: 
-	<% for(var index in api.tags){ %>
-		<a href="#<%= api.tags[index].name %>-part"><button class="btn btn-danger" type="button"><%= api.tags[index].name %></button></a>
-	<% } %>
+	<!-- Button trigger modal(and modal is in bottom) -->
+	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#tableModal">
+		See all tags
+	</button>
 	<h5> <%= api.version %> </h5>
 	<!-- User Part -->
 	<% for(var b_index in api.tags){ %>
@@ -29,7 +30,7 @@
 					<!-- Each part here --> 
 					<% for(var index in api.tags[b_index].body){ %>
 						<!-- URL goes here -->
-						<h4> URL: </h4>
+						<h4 id="<%= api.tags[b_index].body[index].url %>"> URL: </h4>
 						<div class="input-group">
 							<span class="input-group-btn">
 							<% if(api.tags[b_index].body[index].method == "GET"){ %>
@@ -83,7 +84,64 @@
 
 
 </div>
+<!-- Modal -->
+<div class="modal fade" id="tableModal" tabindex="-1" role="dialog" aria-labelledby="tableModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="tableModal">條例式快速跳轉</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Tags Here -->
+				<ul class="nav nav-tabs">
+					<% for(var index in api.tags){ %>
+						<% if(index == 0){ %>
+							<li class="active"><a data-toggle="tab" href="#<%= api.tags[index].name %>-modal"><%= api.tags[index].name %></a></li>
+						<% }else{ %>
+							<li><a data-toggle="tab" href="#<%= api.tags[index].name %>-modal"><%= api.tags[index].name %></a></li>
+						<% } %>
+					<% } %>
+				</ul>
+
+				<div class="tab-content">
+					<% for(var index in api.tags){ %>
+						<% if(index == 0){ %>
+							<div id="<%= api.tags[index].name %>-modal" class="tab-pane fade in active">
+								<h3><%= api.tags[index].name %></h3>
+								<p><%= api.tags[index].description %></p>
+								<% for(var b_index in api.tags[index].body){ %>
+									<a href="#<%= api.tags[index].body[b_index].url %>"><%= api.tags[index].body[b_index].url %></a> <br>
+								<% } %>
+							</div>
+						<% }else{ %>
+							<div id="<%= api.tags[index].name %>-modal" class="tab-pane fade">
+								<h3><%= api.tags[index].name %></h3>
+								<p><%= api.tags[index].description %></p>
+								<% for(var b_index in api.tags[index].body){ %>
+									<a href="#<%= api.tags[index].body[b_index].url %>"><%= api.tags[index].body[b_index].url %></a> <br>
+								<% } %>
+							</div>
+						<% } %>
+					<% } %>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onclick="go()">確認前往</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 </body>
+<script>
+function go(){
+	window.location.reload(false);
+}
+</script>
 <!-- Footer -->
 <% include ../elements/normal_footer_bootstrap %>
 </html>

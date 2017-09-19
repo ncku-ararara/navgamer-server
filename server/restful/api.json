@@ -3,7 +3,7 @@
 	"tags":[
 		{
 			"name": "User",
-			"description": "Dealing with all operation about user.",
+			"description": "處理所有跟使用者相關的操作",
 			"body": [
 			{
 				"usage": "[Online] Register New User",
@@ -174,7 +174,7 @@
 		},
 		{
 			"name": "Owner",
-			"description": "",
+			"description": "處理所有跟店家擁有者相關的操作",
 			"body":[
 				{
 					"usage": "[Online] Register New User",
@@ -287,7 +287,7 @@
 		},
 		{
 			"name": "ADF",
-			"description": "",
+			"description": "處理有關 adf 檔案空間建置、上傳、下載的相關事宜",
 			"body": [
 				{
 					"usage": "[Online] Setting Beacon ID",
@@ -348,14 +348,17 @@
 					"success": "file download require( 跳出視窗來做詢問的下載要求 )"
 				},
 				{
-					"usage": "[Online] Add adf obj in specific location",
+					"usage": "[Online] Add/Update adf obj in specific location",
 					"method": "POST",
 					"url": "http://kevin.imslab.org/add_obj",
-					"description": "把相關的物件檔案(.prefab)儲存進相對應的商家儲存空間",
+					"description": "把相關的物件檔案(.prefab)儲存進相對應的商家儲存空間( 更新指令一樣可以使用，若發現欲上傳的 obj id 以及對應到的 beacon ID 等等設定已存在，便會更新這筆物件相關資訊 )",
 					"field":[
 						{"name": "beaconID", "type": "String"},{"name": "adfID","type": "String"},
-						{"name": "shopID", "type":"String"},{"name":"id","type":"String"},
-						{"name": "pos","type":"String"},{"name":"rot","type":"String"}
+						{"name": "shopID", "type":"String"},{"name": "password", "type":"String"},
+						{"name": "shopName", "type":"String"},{"name": "shopIntro", "type":"String"},
+						{"name":"id","type":"String"},{"name": "pos","type":"String"},
+						{"name":"rot","type":"String"},{"name": "scale", "type":"String"},
+						{"name": "file", "type":"multipart/form-data"}
 					],
 					"error": "{\"result\":\"error ID\"}, {\"result\":\"error\"}, {\"result\":\"illegal account\"}",
 					"success": "{\"result\":\"create\"}, {\"result\":\"update\"}"
@@ -380,7 +383,7 @@
 		},
 		{
 			"name": "Chatbot",
-			"description": "",
+			"description": "有趣的聊天機器人測試",
 			"body": [
 				{
 					"usage": "[Online] Chatbot usage",
@@ -402,7 +405,7 @@
 		},
 		{
 			"name": "Template",
-			"description": "",
+			"description": "為這個說明頁面的模版範例展示",
 			"body": [
 				{
 					"usage": "[Template] Template of doc page format - GET method.",
