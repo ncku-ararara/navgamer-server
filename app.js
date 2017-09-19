@@ -10,6 +10,7 @@ const { Debugger } = require('./server/debug');
 const { IntroService } = require('./server/intro');
 const { DB } = require('./server/db');
 const { UserService } = require('./server/account');
+const { AdfService } = require('./server/adf');
 const { IO } = require('./server/io');
 const { IOService } = require('./server/io_service');
 /* define app(2 for secure & download) */
@@ -60,6 +61,8 @@ IntroService.init(app);
 IntroService.init(app_s);
 UserService.init(app);
 UserService.init(app_s);
+AdfService.init(app);
+AdfService.init(app_s);
 
 /* Special for https */
 IO.init(secure_server);

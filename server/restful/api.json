@@ -159,6 +159,16 @@
 				"description": "取得一名使用者所有公開資訊",
 				"error": "{\"result\":\"wrong account\"} , {\"result\":\"internal error\"}",
 				"success": "{\"result\": long stringified json object"
+			},
+			{
+				"usage": "[Online] Add Problem report to specific shop",
+				"method": "POST",
+				"url": "https://kevin.imslab.org/add_problemReport",
+				"description": "給予店家問題回饋的方式（一個使用者帳號對應一個回報）",
+				"field": [ {"name":"shopID","type":"String"},
+					{"name":"reportPackage","type":"{ who: ... , content: ... , date: ...}"}],
+				"error": "{\"result\":\"wrong shopID\"} , {\"result\":\"internal error\"}",
+				"success": "{\"result\":\"success\"}"
 			}
 			]
 		},
@@ -256,6 +266,22 @@
 					"description": "抓取所有對於該店家的評論",
 					"error": "{\"result\":\"internal error\"}, {\"result\": \"none\" }",
 					"success": "{\"result\": \"Stringified JSON Object(Same format as upload comment)\" }"
+				},
+				{
+					"usage": "[Online] Set shop update time",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/set_shopUpdateTime?shopID=...&updateTime=...",
+					"description": "設定該店家\"負責人\"資訊最後更新的時間",
+					"error": "{\"result\":\"wrong shopID\"}, {\"result\": \"internal error\" }",
+					"success": "{\"result\": \"success\" }"
+				},
+				{
+					"usage": "[Online] Get shop update time",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_shopUpdateTime?shopID=...",
+					"description": "獲取該店家\"負責人\"資訊最後更新的時間",
+					"error": "{\"result\":\"wrong shopID\"}, {\"result\": \"internal error\" }",
+					"success": "{\"result\": updateTime (String) }"
 				}
 			]
 		},
@@ -264,20 +290,65 @@
 			"description": "",
 			"body": [
 				{
-					"usage": "[Debug] Download Adf File",
-					"method": "GET",
-					"url": "http://kevin.imslab.org/adf_g?id=...",
-					"description": "下載相對應 beacon ID 的 adf 檔案； https 也同樣支援！",
-					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
+					"usage": "[Online] Setting Beacon ID",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/create_beaconID",
+					"description": "向 server 註冊一個 beacon ID 的儲存空間",
+					"field":[
+						{"name": "shopID", "type": "String"},{"name": "password","type": "String"},
+						{"name": "auth_flag", "type": "0 or 1"},{"name": "beaconID", "type": "String"}	
+					],
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"error input format\"}, {\"result\":\"illegal account\"}, {\"result\":\"duplicate-beaconID\"}",
 					"success": "{\"result\":\"success\"}"
 				},
 				{
-					"usage": "[Debug] Setting Beacon ID & ADF",
+					"usage": "[Online] Setting Beacon ID & adf ID",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/create_adfID",
+					"description": "向 server 註冊一個 beacon ID + adf ID 的儲存空間( 若 beaconID 不存在，會同時幫忙註冊 beacon ID 的儲存空間！ )",
+					"field":[
+						{"name": "shopID", "type": "String"},{"name": "password","type": "String"},
+						{"name": "auth_flag", "type": "0 or 1"},{"name": "beaconID", "type": "String"},
+						{"name": "adfID", "type": "String"}	
+					],
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"error input format\"}, {\"result\":\"illegal account\"}, {\"result\":\"duplicate-adfID\"}",
+					"success": "{\"result\":\"success\"}, {\"result\":\"success-total\"}"
+				},
+				{
+					"usage": "[Online] Setting Beacon ID & adf ID & shopID",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/create_shop",
+					"description": "向 server 註冊一個 beacon ID + adf ID + shopID 的儲存空間( 若 beaconID 不存在，會同時幫忙註冊 beacon ID 的儲存空間！ )",
+					"field":[
+						{"name": "shopID", "type": "String"},{"name": "password","type": "String"},
+						{"name": "auth_flag", "type": "0 or 1"},{"name": "beaconID", "type": "String"},
+						{"name": "adfID", "type": "String"}	
+					],
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"error input format\"}, {\"result\":\"illegal account\"}, {\"result\":\"duplicate-shopID\"}, {\"result\":\"missing shopID\"}",
+					"success": "{\"result\":\"success\"}, {\"result\":\"success-total\"}"
+				},
+				{
+					"usage": "[Online] Upload adf to specific target ID",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/add_adf",
+					"description": "向 server 的特定儲存空間上傳對應的 adf 檔",
+					"field":[
+						{"name": "beaconID", "type": "String"},{"name": "adfID","type": "String"},
+						{"name": "file", "type": "multipart/form-data"}
+					],
+					"error": "{\"result\":\"error ID\"}, {\"result\":\"error\"}",
+					"success": "{\"result\":\"uploaded\"}"
+				},
+				{
+					"usage": "[Online] Download adf with specific target ID",
 					"method": "GET",
-					"url": "http://kevin.imslab.org/adf_s?id=...&path=...&loc=...",
-					"description": "修改特定的 beacon ID 對應到的相依資料",
-					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
-					"success": "{\"result\":\"success\"}"
+					"url": "http://kevin.imslab.org/get_adf",
+					"description": "向 server 的特定儲存空間要求下載對應的 adf 檔",
+					"field":[
+						{"name": "beaconID", "type": "String"},{"name": "adfID","type": "String"}
+					],
+					"error": "{\"result\":\"error ID\"}, {\"result\":\"error\"}",
+					"success": "file download require( 跳出視窗來做詢問的下載要求 )"
 				}
 			]
 		},

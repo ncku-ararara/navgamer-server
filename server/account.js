@@ -24,13 +24,14 @@ class UserService {
         app.post('/user_streetView_set',this.user_streetView_set);
         app.post('/user_decoration_record',this.user_decoration_record);
         app.get('/get_userInfo',this.get_userInfo);
+        app.post('/add_problemReport',this.add_problemReport);
         // about shop keeper register entries
         app.post('/register_shop',this.register_shop);
         app.post('/login_shop',this.login_shop);
         app.get('/forget_pass_shop',this.forget_pass_shop);
         app.get('/verify_manual_shop',this.verify_manual_shop);
-        app.get('/update_time_shop',this.update_time_shop);
-        app.get('/add_problem_report',this.add_problem_report);
+        app.get('/set_shopUpdateTime',this.set_shopUpdateTime);
+        app.get('/get_shopUpdateTime',this.get_shopUpdateTime);
         app.get('/shopName2shopID',this.shopName2shopID);
         app.post('/set_shopInfo',this.set_shopInfo);
         // about user comment 
@@ -188,6 +189,15 @@ class UserService {
                 res.end(msg);
             else
                 res.end(JSON.stringify(msg));
+        });
+    }
+
+    add_problemReport(req,res){
+        DB.add_problemReport(req.body.shopID,JSON.parse(req.body.reportPackage),function(err,msg){
+            if(err)
+                res.end(msg);
+            else
+                res.end(msg);
         });
     }
 
@@ -352,12 +362,22 @@ class UserService {
         })
     }
 
-    update_time_shop(req,res){
-
+    set_shopUpdateTime(req,res){
+        DB.set_shopkeeper_time(req.query.shopID,req.query.updateTime,function(err,msg){
+            if(err)
+                res.end(msg);
+            else
+                res.end(msg);
+        });
     }
 
-    add_problem_report(req,res){
-        
+    get_shopUpdateTime(req,res){
+        DB.get_shopkeeper_time(req.query.shopID,function(err,msg){
+            if(err)
+                res.end(msg);
+            else
+                res.end(msg);
+        });
     }
 
     shopName2shopID(req,res){

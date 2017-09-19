@@ -110,8 +110,8 @@ class DB {
 		// adf usage
 		this.adfSchema = mongoose.Schema({
 			beaconID: String,
-			location: String,
-			path: String
+			adfID: [ { name: String } ],
+			shopID: [ { name: String } ]
 		});
 		// define schema model
 		this.user_m = mongoose.model('user_m',this.userSchema);
@@ -634,6 +634,40 @@ class DB {
 		});
 	}
 
+	set_shopkeeper_time(shopID,updateTime,callback){
+		this.owner_m.findOne({shopID: shopID},'updateTime',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"wrong shopID");
+				}
+				else{
+					match.updateTime = updateTime;
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
+	get_shopkeeper_time(shopID,callback){
+		this.owner_m.findOne({shopID: shopID},'updateTime',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null)
+					callback(1,"wrong shopID");
+				else
+					callback(0,match.updateTime);
+			}
+		});
+	}
+
 	shopkeeper_login(name,pass,callback){
 		this.owner_m.findOne({shopID: name,password: pass},'',function(err,match){
 			if(err){
@@ -833,6 +867,42 @@ class DB {
 			}
 		});
 	}
+
+	add_problemReport(shopID,reportPackage,callback){
+		this.owner_m.findOne({shopID: shopID},'problemReport',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"wrong shopID");
+				}else{
+					// push this problem into package
+					/* one account match with one problem 
+					let index = match.problemReport.findIndex(i => i.who === reportPackage.who);
+					if(index == -1){
+						// not found , push 
+						match.problemReport.push(reportPackage);
+						// saving (TODO)
+						callback(0,"create");
+					}else{
+						// found , and then update
+						match.problemReport[index] = reportPackage;
+						// saving (TODO)
+						callback(0,"update");
+					}*/ 
+					/* every one can have several problem reports */
+					match.problemReport.push(reportPackage);
+					match.save(function(err,match){
+						if(err)
+							callback(1,"internal error");
+						else
+							callback(0,"success");
+					});
+				}
+			}
+		});
+	}
+
 	// about comment 
 	add_comment(userID,shopID,content,picture,time,score,callback){
 		var comm_model = this.comm_m;
@@ -876,55 +946,280 @@ class DB {
 		});
 	}
 
-	// dealing with adf fetch/set
-	set_adf(id,path,loc,callback){
+	set_adf_beaconID(name,pass,auth_flag,beaconID,callback){
 		var adf_model = this.adf_m;
-		this.adf_m.findOne({beaconID: id},'location path',function(err,match){
-			if(err){
+		var owner_model = this.owner_m;
+		this.adf_m.findOne({beaconID: beaconID},'',function(err,match){
+			if(err)
 				callback(1,"internal error");
-			}
 			else{
 				if(match == null){
-					// initial one for it
-					let newAdf = new adf_model({beaconID: id,location: loc,path: path});
-					newAdf.save(function(s_err,newAdf){
-						if(s_err){
-							callback(1,"internal error")
-						}
+					// auth 
+					owner_model.findOne({shopID: name, password: pass},'',function(err,auth){
+						if(err)
+							callback(1,"internal error");
 						else{
-							callback(0,"success");
+							if(auth_flag == 1){
+								if(auth == null){
+									// not found this user 
+									callback(1,"illegal account");
+								}
+								else{
+									// create for it 
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [], shopID: []});
+									newAdf.save(function(err,newAdf){
+										if(err)
+											callback(1,"internal error");
+										else 
+											callback(0,"success");
+									});
+								}
+							}
+							else{
+								// not need to auth 
+								// create for it 
+								let newAdf = new adf_model({beaconID: beaconID, adfID: [], shopID: []});
+								newAdf.save(function(err,newAdf){
+									if(err)
+										callback(1,"internal error");
+									else 
+										callback(0,"success");
+								});
+							}
 						}
 					});
 				}
 				else{
-					// find! and then update!
-					match.path = path;
-					match.location = loc;
-					match.save(function(s_err,match){
-						if(s_err){
-							callback(1,"internal error")
-						}
-						else{
-							callback(0,"success");
-						}
-					});
+					// duplicate 
+					callback(1,"duplicate-beaconID")
 				}
 			}
 		});
 	}
-	get_adf(id,callback){
-		this.adf_m.findOne({beaconID: id},'location path',function(err,match){
-			if(err){
+
+	set_adf_adfID(name,pass,auth_flag,beaconID,adfID,callback){
+		var adf_model = this.adf_m;
+		var owner_model = this.owner_m;
+		this.adf_m.findOne({beaconID: beaconID},'adfID',function(err,match){
+			if(err)
 				callback(1,"internal error");
-			}
 			else{
 				if(match == null){
-					// not found 
-					callback(1,"external error");
+					// auth 
+					owner_model.findOne({shopID: name, password: pass},'',function(err,auth){
+						if(err)
+							callback(1,"internal error");
+						else{
+							if(auth_flag == 1){
+								if(auth == null){
+									// not found this user 
+									callback(1,"illegal account");
+								}
+								else{
+									// create for it 
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID} ], shopID: []});
+									newAdf.save(function(err,newAdf){
+										if(err)
+											callback(1,"internal error");
+										else 
+											callback(0,"success-total");
+									});
+								}
+							}
+							else{
+								// not need to auth 
+								// create for it 
+								let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: []});
+								newAdf.save(function(err,newAdf){
+									if(err)
+										callback(1,"internal error");
+									else 
+										callback(0,"success-total");
+								});
+							}
+						}
+					});
 				}
 				else{
-					// return result
-					callback(0,match);
+					let index = match.adfID.findIndex(i => i.name === adfID);
+					if(index == -1){
+						// only create adf
+						match.adfID.push({ name: adfID});
+						match.save(function(err,match){
+							if(err)
+								callback(1,"internal error");
+							else 
+								callback(0,"success")
+						})
+					}
+					else{
+						// duplicate 
+						callback(1,"duplicate-adfID");
+					}
+				}
+			}
+		});
+	}
+
+	set_adf_shopID(name,pass,auth_flag,beaconID,adfID,callback){
+		var adf_model = this.adf_m;
+		var owner_model = this.owner_m;
+		this.adf_m.findOne({beaconID: beaconID},'adfID shopID',function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					// auth 
+					owner_model.findOne({shopID: name, password: pass},'',function(err,auth){
+						if(err)
+							callback(1,"internal error");
+						else{
+							if(auth_flag == 1){
+								if(auth == null){
+									// not found this user 
+									callback(1,"illegal account");
+								}
+								else{
+									// create for it 
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: [ { name: name } ]});
+									newAdf.save(function(err,newAdf){
+										if(err)
+											callback(1,"internal error");
+										else 
+											callback(0,"success-total");
+									});
+								}
+							}
+							else{
+								// not need to auth , check shopID 
+								if(name != undefined){
+									// create for it 
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: [ { name: name } ]});
+									newAdf.save(function(err,newAdf){
+										if(err)
+											callback(1,"internal error");
+										else 
+											callback(0,"success-total");
+									});
+								}
+								else{
+									callback(1,"missing shopID");
+								}
+							}
+						}
+					});
+				}
+				else{
+					// auth 
+					owner_model.findOne({shopID: name, password: pass},'',function(err,auth){
+						if(err)
+							callback(1,"internal error");
+						else{
+							if(auth_flag == 1){
+								if(auth == null){
+									// not found this user 
+									callback(1,"illegal account");
+								}
+								else{
+									// update
+									let index = match.adfID.findIndex(i => i.name === adfID);
+									let s_index = match.shopID.findIndex(i => i.name === name);
+									if(index == -1){
+										// only create adf
+										match.adfID.push({ name: adfID});
+										match.save(function(err,match){
+											if(err)
+												callback(1,"internal error");
+											else{
+												if(s_index == -1){
+													// only create shopID 
+													match.shopID.push({name:name});
+													match.save(function(err,match){
+														if(err)
+															callback(1,"internal error");
+														else 
+															callback(0,"success");
+													});
+												}
+												else{
+													// duplicate 
+													callback(1,"duplicate-shopID");
+												}
+											}
+										})
+									}
+									else{
+										// duplicate adfID  
+										if(s_index == -1){
+											// only create shopID 
+											match.shopID.push({name:name});
+											match.save(function(err,match){
+												if(err)
+													callback(1,"internal error");
+												else 
+													callback(0,"success");
+											});
+										}
+										else{
+											// duplicate 
+											callback(1,"duplicate-shopID");
+										}
+									}
+								}
+							}
+							else{
+								// not need to auth , check shopID 
+								if(name != undefined){
+									let index = match.adfID.findIndex(i => i.name === adfID);
+									let s_index = match.shopID.findIndex(i => i.name === name);
+									if(index == -1){
+										// only create adf
+										match.adfID.push({ name: adfID});
+										match.save(function(err,match){
+											if(err)
+												callback(1,"internal error");
+											else{
+												if(s_index == -1){
+													// only create shopID 
+													match.shopID.push({name:name});
+													match.save(function(err,match){
+														if(err)
+															callback(1,"internal error");
+														else 
+															callback(0,"success");
+													});
+												}
+												else{
+													// duplicate 
+													callback(1,"duplicate-shopID");
+												}
+											}
+										})
+									}
+									else{
+										// duplicate adfID  
+										if(s_index == -1){
+											// only create shopID 
+											match.shopID.push({name:name});
+											match.save(function(err,match){
+												if(err)
+													callback(1,"internal error");
+												else 
+													callback(0,"success");
+											});
+										}
+										else{
+											// duplicate 
+											callback(1,"duplicate-shopID");
+										}
+									}
+								}
+								else{
+									callback(1,"missing shopID");
+								}
+							}
+						}
+					});
 				}
 			}
 		});
