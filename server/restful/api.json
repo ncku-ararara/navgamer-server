@@ -124,7 +124,7 @@
 			{
 				"usage": "[Online] Setting user Character collection list",
 				"method": "POST",
-				"url": "https://kevin.imslab.org/user_achieveColl_set",
+				"url": "https://kevin.imslab.org/user_charaColl_set",
 				"description": "針對使用者的\"角色圖鑑紀錄\"做設定（注意！是直接置換新給予值的設定方式）",
 				"field": [ {"name":"username","type":"String"},{"name":"password","type":"String"},
 					{"name":"chara_coll_list","type":"(stringified) JSON array"}],
@@ -253,9 +253,9 @@
 					"usage": "[Online] Upload Comment",
 					"method": "POST",
 					"url": "https://kevin.imslab.org/upload_comment",
-					"description": "發表對一個商家的評論",
+					"description": "發表對一個商家的評論(可以附加一張圖片！)",
 					"field": [ {"name": "userID","type":"String"},{"name": "shopID","type":"String"},{"name": "text_content","type":"String"}
-						,{"name": "picture","type":"Binary file"},{"name": "time","type":"String(any Date format)"},{"name": "score","type": "Integer(1~5)"} ],
+						,{"name": "file","type":"multipart/form-data (Binary file)"},{"name": "time","type":"String(any Date format)"},{"name": "score","type": "Integer(1~5)"} ],
 					"error": "{\"result\":\"internal error\"}, {\"result\": \"duplicated\" }",
 					"success": "{\"result\": \"success\" }"
 				},

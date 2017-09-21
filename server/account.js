@@ -1,8 +1,26 @@
 // dealing with user account entries
 const path = require('path');
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 const { DB } = require('./db');
 const { MailMan } = require('./mail');
+
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        mkdirp('/tmp/navgamer-tmp',function(err){
+            if(err)
+                console.log("mkdirp error");
+            cb(null, '/tmp/navgamer-tmp');
+        });
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+})
+ 
+var upload = multer({ storage: storage })
 
 class UserService {
     init(app){
@@ -35,7 +53,7 @@ class UserService {
         app.get('/shopName2shopID',this.shopName2shopID);
         app.post('/set_shopInfo',this.set_shopInfo);
         // about user comment 
-        app.post('/upload_comment',this.upload_comment); // using multer to get binary!! (req.file & req.body)
+        app.post('/upload_comment',upload.single('file'),this.upload_comment); // using multer to get binary!! (req.file & req.body)
         app.get('/get_shopOwnerInfo',this.get_shopOwnerInfo); 
         app.get('/get_shopInfo',this.get_shopInfo);
         app.get('/get_shopComm',this.get_shopComm);
@@ -154,7 +172,7 @@ class UserService {
     }
 
     user_charaColl_set(req,res){
-        DB.user_achieveColl_set(req.body.username,req.body.password,
+        DB.user_charaColl_set(req.body.username,req.body.password,
             JSON.parse(req.body.chara_coll_list),function(err,msg){
                 if(err)
                     res.end(msg);
@@ -425,8 +443,12 @@ class UserService {
     upload_comment(req,res){
         // userID, shopID, text_content, picture(binary), time, score
         const commBody = req.body;
+        // read file from the tmp 
+        var file_tmp = fs.readFileSync(path.join('/tmp/navgamer-tmp',req.file.originalname));
+        var file_type = req.file.mimetype;
+
         DB.add_comment(commBody.userID,commBody.shopID,commBody.text_content,
-            commBody.picture,commBody.time,commBody.score,
+            file_tmp,file_type,commBody.time,commBody.score,
             function(err,msg){
                 if(err)
                     res.end(msg);

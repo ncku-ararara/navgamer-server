@@ -916,7 +916,7 @@ class DB {
 	}
 
 	// about comment 
-	add_comment(userID,shopID,content,picture,time,score,callback){
+	add_comment(userID,shopID,content,picture_body,picture_type,time,score,callback){
 		var comm_model = this.comm_m;
 		this.comm_m.findOne({userID: userID,shopID: shopID},'',function(err,match){
 			if(err)
@@ -925,7 +925,7 @@ class DB {
 				if(match == null){
 					// not found -> legal
 					let newComm = new comm_model({ userID: userID,shopID: shopID,
-						text_content: content, picture: picture, time: time, score: score}); // => FIXME: picture need to be modify
+						text_content: content, picture: {data: picture_body, contentType: picture_type }, time: time, score: score}); // => FIXME: picture need to be modify
 					newComm.save(function(s_err,newComm){
 						if(s_err)
 							callback(1,"internal error");
