@@ -121,7 +121,7 @@ class UserService {
 
     user_furni_insertORupdate(req,res){
         const furniObj = req.body;
-        DB.user_props_delete(furniObj.username,furniObj.password,
+        DB.user_furni_insertORupdate(furniObj.username,furniObj.password,
             JSON.parse(furniObj.furni_quant_array),function(err,msg){
                 if(err)
                     res.end(msg);
@@ -132,7 +132,7 @@ class UserService {
 
     user_furni_delete(req,res){
         const furniObj = req.body;
-        DB.user_props_delete(furniObj.username,furniObj.password,
+        DB.user_furni_delete(furniObj.username,furniObj.password,
             JSON.parse(furniObj.furni_quant_array),function(err,msg){
                 if(err)
                     res.end(msg);

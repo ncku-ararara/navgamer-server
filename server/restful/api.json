@@ -378,6 +378,14 @@
 					"description": "下載對應 ID 底下的特定 adf 相依物件的資料屬性（注意！這邊回傳的是當初傳進去的字串，若當時傳入的時候是錯的，那麼拿出來也會是錯的！）",
 					"error": "{\"result\":\"internal error\"}, {\"result\": \"not found\" }",
 					"success": "(Stringified) json object"
+				},
+				{
+					"usage": "[Online] List the hierarchy of storage",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/list_storage_hierarchy",
+					"description": "列出目前儲存空間的配置情形",
+					"error": "{\"result\":\"internal error\"}",
+					"success": "(Stringified) JSON array"
 				}
 			]
 		},
@@ -412,6 +420,17 @@
 					"method": "GET",
 					"url": "https://kevin.imslab.org/<pathname>?<params ... >",
 					"description": "<說明該 url 使用的目的>",
+					"error": "{\"result\":\"錯誤訊息\"}, {\"result\":\"更多錯誤訊息\"}",
+					"success": "{\"result\":\"成功訊息\"}"
+				},
+				{
+					"usage": "[Template] Template of doc page format - HOST method.",
+					"method": "POST",
+					"url": "http://kevin.imslab.org/<pathname>",
+					"description": "<說明該 url 使用的目的>",
+					"field":[
+						{"name": "<fieldname 1>", "type": "<Data type>"},{"name": "<fieldname 2>", "type": "<Data type>"}
+					],
 					"error": "{\"result\":\"錯誤訊息\"}, {\"result\":\"更多錯誤訊息\"}",
 					"success": "{\"result\":\"成功訊息\"}"
 				}

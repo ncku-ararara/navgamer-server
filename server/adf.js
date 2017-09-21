@@ -30,6 +30,8 @@ class AdfService {
         app.post('/create_adfID',this.create_adfID);
         // create shopID which under specific adfID, beaconID
         app.post('/create_shop',this.create_shop);
+        // list 
+        app.get('/list_storage_hierarchy',this.list_storage_hierarchy);
         // upload/download adf data 
         app.post('/add_adf',upload.single('file'),this.add_adf);
         app.get('/get_adf',this.get_adf);
@@ -99,6 +101,18 @@ class AdfService {
                     }
                 });
         }
+    }
+
+    list_storage_hierarchy(req,res){
+        // list all existed 
+        DB.list_storage_hierarchy(function(err,msg){
+            if(err)
+                res.end(msg);
+            else{
+                // FIXME: using fsx to check and auto-recovery the mistake
+                res.end(JSON.stringify(msg));
+            }
+        });
     }
 
     add_adf(req,res){

@@ -110,8 +110,7 @@ class DB {
 		// adf usage
 		this.adfSchema = mongoose.Schema({
 			beaconID: String,
-			adfID: [ { name: String } ],
-			shopID: [ { name: String } ]
+			adfID: [ { name: String , shopID: [ { name: String } ] } ]
 		});
 		this.adfObjSchema = mongoose.Schema({
 			id: String,
@@ -978,7 +977,7 @@ class DB {
 								}
 								else{
 									// create for it 
-									let newAdf = new adf_model({beaconID: beaconID, adfID: [], shopID: []});
+									let newAdf = new adf_model({beaconID: beaconID, adfID: []});
 									newAdf.save(function(err,newAdf){
 										if(err)
 											callback(1,"internal error");
@@ -990,7 +989,7 @@ class DB {
 							else{
 								// not need to auth 
 								// create for it 
-								let newAdf = new adf_model({beaconID: beaconID, adfID: [], shopID: []});
+								let newAdf = new adf_model({beaconID: beaconID, adfID: []});
 								newAdf.save(function(err,newAdf){
 									if(err)
 										callback(1,"internal error");
@@ -1029,7 +1028,7 @@ class DB {
 								}
 								else{
 									// create for it 
-									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID} ], shopID: []});
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID, shopID: []} ]});
 									newAdf.save(function(err,newAdf){
 										if(err)
 											callback(1,"internal error");
@@ -1041,7 +1040,7 @@ class DB {
 							else{
 								// not need to auth 
 								// create for it 
-								let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: []});
+								let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID, shopID: []} ]});
 								newAdf.save(function(err,newAdf){
 									if(err)
 										callback(1,"internal error");
@@ -1056,7 +1055,7 @@ class DB {
 					let index = match.adfID.findIndex(i => i.name === adfID);
 					if(index == -1){
 						// only create adf
-						match.adfID.push({ name: adfID});
+						match.adfID.push({ name: adfID, shopID: []});
 						match.save(function(err,match){
 							if(err)
 								callback(1,"internal error");
@@ -1076,7 +1075,7 @@ class DB {
 	set_adf_shopID(name,pass,auth_flag,beaconID,adfID,callback){
 		var adf_model = this.adf_m;
 		var owner_model = this.owner_m;
-		this.adf_m.findOne({beaconID: beaconID},'adfID shopID',function(err,match){
+		this.adf_m.findOne({beaconID: beaconID},'adfID',function(err,match){
 			if(err)
 				callback(1,"internal error");
 			else{
@@ -1093,7 +1092,7 @@ class DB {
 								}
 								else{
 									// create for it 
-									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: [ { name: name } ]});
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID, shopID: [ { name: name } ]} ]});
 									newAdf.save(function(err,newAdf){
 										if(err)
 											callback(1,"internal error");
@@ -1106,7 +1105,7 @@ class DB {
 								// not need to auth , check shopID 
 								if(name != undefined){
 									// create for it 
-									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID } ], shopID: [ { name: name } ]});
+									let newAdf = new adf_model({beaconID: beaconID, adfID: [ { name: adfID,shopID: [ { name: name } ]} ]});
 									newAdf.save(function(err,newAdf){
 										if(err)
 											callback(1,"internal error");
@@ -1135,7 +1134,7 @@ class DB {
 								else{
 									// update
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.shopID.findIndex(i => i.name === name);
+									let s_index = match.adfID.shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
 										match.adfID.push({ name: adfID});
@@ -1145,7 +1144,7 @@ class DB {
 											else{
 												if(s_index == -1){
 													// only create shopID 
-													match.shopID.push({name:name});
+													match.adfID.shopID.push({name:name});
 													match.save(function(err,match){
 														if(err)
 															callback(1,"internal error");
@@ -1164,7 +1163,7 @@ class DB {
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
-											match.shopID.push({name:name});
+											match.adfID.shopID.push({name:name});
 											match.save(function(err,match){
 												if(err)
 													callback(1,"internal error");
@@ -1183,7 +1182,7 @@ class DB {
 								// not need to auth , check shopID 
 								if(name != undefined){
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.shopID.findIndex(i => i.name === name);
+									let s_index = match.adfID.shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
 										match.adfID.push({ name: adfID});
@@ -1193,7 +1192,7 @@ class DB {
 											else{
 												if(s_index == -1){
 													// only create shopID 
-													match.shopID.push({name:name});
+													match.adfID.shopID.push({name:name});
 													match.save(function(err,match){
 														if(err)
 															callback(1,"internal error");
@@ -1212,7 +1211,7 @@ class DB {
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
-											match.shopID.push({name:name});
+											match.adfID.shopID.push({name:name});
 											match.save(function(err,match){
 												if(err)
 													callback(1,"internal error");
@@ -1234,6 +1233,15 @@ class DB {
 					});
 				}
 			}
+		});
+	}
+
+	list_storage_hierarchy(callback){
+		this.adf_m.find({},'beaconID adfID',function(err,all){
+			if(err)
+				callback(1,"internal error");
+			else
+				callback(0,all);
 		});
 	}
 
