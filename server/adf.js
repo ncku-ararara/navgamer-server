@@ -39,6 +39,8 @@ class AdfService {
         app.post('/add_obj',upload.single('file'),this.add_obj);
         app.get('/get_obj_file',this.get_obj_file);
         app.get('/get_obj_info',this.get_obj_info);
+        // get all shopName under specific adfID
+        app.get('/get_shopIDs',this.get_shopIDs);
     }
 
     create_beaconID(req,res){
@@ -164,8 +166,8 @@ class AdfService {
                         { overwrite: true })
                         .then(() => {
                             // add info obj into shop
-                            DB.add_adf_obj(req.body.shopID,req.body.password,req.body.id,
-                                req.body.shopName,req.body.shopIntro,req.body.beaconID,
+                            DB.add_adf_obj(req.body.shopID,req.body.password,req.body.shopName,
+                                req.body.shopIntro,req.body.id,req.body.beaconID,
                                 req.body.adfID,req.body.pos,req.body.rot,req.body.scale,function(err,msg){
                                     if(err)
                                         res.end(msg);
@@ -200,6 +202,15 @@ class AdfService {
                 res.end(msg);
             else
                 res.end(JSON.stringify(msg));
+        });
+    }
+
+    get_shopIDs(req,res){
+        DB.get_shopIDs_byadfID(req.query.beaconID,req.query.adfID,function(err,msg){
+            if(err)
+                res.end(msg);
+            else 
+                res.end(JSON.stringify(msg)); // return json array
         });
     }
 }

@@ -386,6 +386,14 @@
 					"description": "列出目前儲存空間的配置情形",
 					"error": "{\"result\":\"internal error\"}",
 					"success": "(Stringified) JSON array"
+				},
+				{
+					"usage": "[Online] List all the shopID under specific area",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_shopIDs?beaconID=...&adfID=...",
+					"description": "列出特定儲存空間底下所有店家的 ID",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"not found\"}",
+					"success": "(Stringified) JSON array"
 				}
 			]
 		},

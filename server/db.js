@@ -1134,17 +1134,17 @@ class DB {
 								else{
 									// update
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.adfID.shopID.findIndex(i => i.name === name);
+									let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
-										match.adfID.push({ name: adfID});
+										match.adfID.push({ name: adfID, shopID: []});
 										match.save(function(err,match){
 											if(err)
 												callback(1,"internal error");
 											else{
 												if(s_index == -1){
 													// only create shopID 
-													match.adfID.shopID.push({name:name});
+													match.adfID[index].shopID.push({name:name});
 													match.save(function(err,match){
 														if(err)
 															callback(1,"internal error");
@@ -1163,7 +1163,7 @@ class DB {
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
-											match.adfID.shopID.push({name:name});
+											match.adfID[index].shopID.push({name:name, shopID: []});
 											match.save(function(err,match){
 												if(err)
 													callback(1,"internal error");
@@ -1182,10 +1182,10 @@ class DB {
 								// not need to auth , check shopID 
 								if(name != undefined){
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.adfID.shopID.findIndex(i => i.name === name);
+									let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
-										match.adfID.push({ name: adfID});
+										match.adfID.push({ name: adfID, shopID: []});
 										match.save(function(err,match){
 											if(err)
 												callback(1,"internal error");
@@ -1211,7 +1211,7 @@ class DB {
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
-											match.adfID.shopID.push({name:name});
+											match.adfID[index].shopID.push({name:name});
 											match.save(function(err,match){
 												if(err)
 													callback(1,"internal error");
@@ -1305,6 +1305,26 @@ class DB {
 					}
 				}
 			});
+	}
+
+	get_shopIDs_byadfID(beaconID,adfID,callback){
+		this.adf_m.findOne({beaconID:beaconID},function(err,match){
+			if(err)
+				callback(1,"internal error");
+			else{
+				if(match == null){
+					callback(1,"not found beaconID");
+				}
+				else{
+					let index = match.adfID.findIndex(i => i.name == adfID);
+					if(index == -1){
+						callback(1,"not found adfID")
+					}else{
+						callback(0,match.adfID[index].shopID); // return all shopIDs instance
+					}
+				}
+			}
+		});
 	}
 }
 
