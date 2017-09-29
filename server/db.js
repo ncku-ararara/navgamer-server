@@ -1134,7 +1134,6 @@ class DB {
 								else{
 									// update
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
 										match.adfID.push({ name: adfID, shopID: []});
@@ -1160,6 +1159,7 @@ class DB {
 										})
 									}
 									else{
+										let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
@@ -1182,7 +1182,6 @@ class DB {
 								// not need to auth , check shopID 
 								if(name != undefined){
 									let index = match.adfID.findIndex(i => i.name === adfID);
-									let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 									if(index == -1){
 										// only create adf
 										match.adfID.push({ name: adfID, shopID: []});
@@ -1208,6 +1207,7 @@ class DB {
 										})
 									}
 									else{
+										let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 										// duplicate adfID  
 										if(s_index == -1){
 											// only create shopID 
