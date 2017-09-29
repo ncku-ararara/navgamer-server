@@ -1135,6 +1135,7 @@ class DB {
 									// update
 									let index = match.adfID.findIndex(i => i.name === adfID);
 									if(index == -1){
+										let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 										// only create adf
 										match.adfID.push({ name: adfID, shopID: []});
 										match.save(function(err,match){
@@ -1183,6 +1184,7 @@ class DB {
 								if(name != undefined){
 									let index = match.adfID.findIndex(i => i.name === adfID);
 									if(index == -1){
+										let s_index = match.adfID[index].shopID.findIndex(i => i.name === name);
 										// only create adf
 										match.adfID.push({ name: adfID, shopID: []});
 										match.save(function(err,match){
