@@ -120,9 +120,12 @@ class AdfService {
     add_adf(req,res){
         // fetch beacon ID, and adf ID
         // console.log(req.file);
-        
-        // checking path 
-        fsx.pathExists(path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID))
+        if(req.body.beaconID == undefined || req.body.adfID == undefined || req.file == undefined){
+            res.end("error");
+        }
+        else{
+            // checking path 
+            fsx.pathExists(path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID))
             .then(exists => {
                 if(exists == false)
                     res.end("error ID");
@@ -139,6 +142,7 @@ class AdfService {
                         });
                 }
             });
+        }
     }
 
     get_adf(req,res){
@@ -154,34 +158,39 @@ class AdfService {
     }
 
     add_obj(req,res){
-        // check 
-        var file = path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID);
-        fsx.pathExists(file).then(exists => {
-            if(exists == false)
-                res.end("error ID");
-            else{
-                // moving files (overwrite if the file is already existed)
-                fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
-                        path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.shopID,req.body.id),
-                        { overwrite: true })
-                        .then(() => {
-                            // add info obj into shop
-                            DB.add_adf_obj(req.body.shopID,req.body.password,req.body.shopName,
-                                req.body.shopIntro,req.body.id,req.body.beaconID,
-                                req.body.adfID,req.body.pos,req.body.rot,req.body.scale,function(err,msg){
-                                    if(err)
-                                        res.end(msg);
-                                    else
-                                        res.end(msg);
-                            });
-                        })
-                        .catch( err => {
-                            res.end("error");
-                        });
-            }
-        }).catch( err => {
+        if(req.body.beaconID == undefined || req.body.adfID == undefined || req.body.shopID == undefined || req.file == undefined){
             res.end("error");
-        });
+        }
+        else{
+            // check 
+            var file = path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID);
+            fsx.pathExists(file).then(exists => {
+                if(exists == false)
+                    res.end("error ID");
+                else{
+                    // moving files (overwrite if the file is already existed)
+                    fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
+                            path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.shopID,req.body.id),
+                            { overwrite: true })
+                            .then(() => {
+                                // add info obj into shop
+                                DB.add_adf_obj(req.body.shopID,req.body.password,req.body.shopName,
+                                    req.body.shopIntro,req.body.id,req.body.beaconID,
+                                    req.body.adfID,req.body.pos,req.body.rot,req.body.scale,function(err,msg){
+                                        if(err)
+                                            res.end(msg);
+                                        else
+                                            res.end(msg);
+                                });
+                            })
+                            .catch( err => {
+                                res.end("error");
+                            });
+                }
+            }).catch( err => {
+                res.end("error");
+            });
+        }
     }
 
     get_obj_file(req,res){
