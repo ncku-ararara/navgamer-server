@@ -1193,7 +1193,7 @@ class DB {
 											else{
 												if(s_index == -1){
 													// only create shopID 
-													match.adfID.shopID.push({name:name});
+													match.adfID[index].shopID.push({name:name});
 													match.save(function(err,match){
 														if(err)
 															callback(1,"internal error");
