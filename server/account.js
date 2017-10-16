@@ -65,140 +65,216 @@ class UserService {
         const password = req.body.password;
         const email = req.body.email;
         const ltype = ( req.body.ltype == undefined ? 'TW' : req.body.ltype );
-        console.log(`Username: ${username}, Password: ${password}, Email: ${email}`);
-        // get register function
-        DB.user_register(username,password,email,function(err,msg){
-            if(err){
-                res.end(msg);
-            }
-            else{
-                // response
-                res.end(msg);
-                // email to notify this user !
-                var content = fs.readFileSync(path.join(__dirname,'mail',ltype,'congratulation.txt'),'utf-8');
-                // mailing
-                MailMan.mail(email,"NavGamer System Notify Mail",content,function(err,msg){
-                    console.log(msg);
-                });
-            }
-        });
+        console.log(`New user Register work, Username: ${username}, Password: ${password}, Email: ${email}`);
+
+        if(username == undefined || password == undefined || email == undefined){
+            res.end('internal error');
+        }
+        else{
+            // get register function
+            DB.user_register(username,password,email,function(err,msg){
+                if(err){
+                    res.end(msg);
+                }
+                else{
+                    // response
+                    res.end(msg);
+                    // email to notify this user !
+                    var content = fs.readFileSync(path.join(__dirname,'mail',ltype,'congratulation.txt'),'utf-8');
+                    // mailing
+                    MailMan.mail(email,"NavGamer System Notify Mail",content,function(err,msg){
+                        console.log(msg);
+                    });
+                }
+            });
+        }
     }
 
     user_basicInfo_update(req,res){
         const basic = req.body;
         console.log(`User Basic Info update! Username: ${basic.username}, Password: ${basic.password}`);
-        DB.user_basicInfo_update(basic.username,basic.password,basic.charID,
-            basic.strength,basic.intelligence,basic.like,
-            basic.money,basic.hour,basic.level,function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+
+        if(basic.username == undefined || basic.password == undefined || basic.charID == undefined || basic.strength == undefined
+            || basic.intelligence == undefined || basic.like == undefined || basic.money == undefined 
+            || basic.hour == undefined || basic.level == undefined)
+        {
+                res.end('internal error');
+        }
+        else{
+            DB.user_basicInfo_update(basic.username,basic.password,basic.charID,
+                basic.strength,basic.intelligence,basic.like,
+                basic.money,basic.hour,basic.level,function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_props_insertORupdate(req,res){
         const propsObj = req.body;
-        DB.user_props_insertORupdate(propsObj.username,propsObj.password,
-            JSON.parse(propsObj.props_quant_array),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${propsObj.username} props insert/update!`)
+        if(propsObj.username == undefined || propsObj.password == undefined || propsObj.props_quant_array == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_props_insertORupdate(propsObj.username,propsObj.password,
+                JSON.parse(propsObj.props_quant_array),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_props_delete(req,res){
         const propsObj = req.body;
-        DB.user_props_delete(propsObj.username,propsObj.password,
-            JSON.parse(propsObj.props_quant_array),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${propsObj.username} props delete!`)
+        if(propsObj.username == undefined || propsObj.password == undefined || propsObj.props_quant_array == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_props_delete(propsObj.username,propsObj.password,
+                JSON.parse(propsObj.props_quant_array),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_furni_insertORupdate(req,res){
         const furniObj = req.body;
-        DB.user_furni_insertORupdate(furniObj.username,furniObj.password,
-            JSON.parse(furniObj.furni_quant_array),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${propsObj.username} furni insert/update!`)
+        if(furniObj.username == undefined || furniObj.password == undefined || furniObj.furni_quant_array == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_furni_insertORupdate(furniObj.username,furniObj.password,
+                JSON.parse(furniObj.furni_quant_array),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_furni_delete(req,res){
         const furniObj = req.body;
-        DB.user_furni_delete(furniObj.username,furniObj.password,
-            JSON.parse(furniObj.furni_quant_array),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${propsObj.username} furni delete!`)
+        if(furniObj.username == undefined || furniObj.password == undefined || furniObj.furni_quant_array == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_furni_delete(furniObj.username,furniObj.password,
+                JSON.parse(furniObj.furni_quant_array),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_favShop_set(req,res){
-        DB.user_favShop_set(req.body.username,req.body.password,
-            JSON.parse(req.body.fav_shopID_list),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else 
-                    res.end(msg);
-        });
+        console.log(`User ${req.body.username} favorite shops list set!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.fav_shopID_list == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_favShop_set(req.body.username,req.body.password,
+                JSON.parse(req.body.fav_shopID_list),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else 
+                        res.end(msg);
+            });
+        }
     }
 
     user_eventColl_set(req,res){
-        DB.user_eventColl_set(req.body.username,req.body.password,
-            JSON.parse(req.body.event_coll_list),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else 
-                    res.end(msg);
-        });
+        console.log(`User ${req.body.username} event collection list set!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.event_coll_list == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_eventColl_set(req.body.username,req.body.password,
+                JSON.parse(req.body.event_coll_list),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else 
+                        res.end(msg);
+            });
+        }
     }
 
     user_achieveColl_set(req,res){
-        DB.user_achieveColl_set(req.body.username,req.body.password,
-            JSON.parse(req.body.achieve_coll_list),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${req.body.username} achievement collection list set!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.achieve_coll_list == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_achieveColl_set(req.body.username,req.body.password,
+                JSON.parse(req.body.achieve_coll_list),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_charaColl_set(req,res){
-        DB.user_charaColl_set(req.body.username,req.body.password,
-            JSON.parse(req.body.chara_coll_list),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${req.body.username} character collection list set!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.chara_coll_list == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_charaColl_set(req.body.username,req.body.password,
+                JSON.parse(req.body.chara_coll_list),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     user_streetView_set(req,res){
-        DB.user_streetView_set(req.body.username,req.body.password,req.body.mode_flag,
-            req.body.obj_flag,req.body.info_flag,function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-            });
+        console.log(`User ${req.body.username} street view set!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.mode_flag == undefined
+            || req.body.obj_flag == undefined || req.body.info_flag == undefined){
+                res.end('internal error')
+        }
+        else{
+            DB.user_streetView_set(req.body.username,req.body.password,req.body.mode_flag,
+                req.body.obj_flag,req.body.info_flag,function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+                });
+        }
     }
 
     user_decoration_record(req,res){
-        DB.user_decoration_record(req.body.username,req.body.password,
-            JSON.parse(req.body.decoration_record),function(err,msg){
-                if(err)
-                    res.end(msg);
-                else
-                    res.end(msg);
-        });
+        console.log(`User ${req.body.username} decoration record!`)
+        if(req.body.username == undefined || req.body.password == undefined || req.body.decoration_record == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.user_decoration_record(req.body.username,req.body.password,
+                JSON.parse(req.body.decoration_record),function(err,msg){
+                    if(err)
+                        res.end(msg);
+                    else
+                        res.end(msg);
+            });
+        }
     }
 
     get_userInfo(req,res){
@@ -211,12 +287,18 @@ class UserService {
     }
 
     add_problemReport(req,res){
-        DB.add_problemReport(req.body.shopID,JSON.parse(req.body.reportPackage),function(err,msg){
-            if(err)
-                res.end(msg);
-            else
-                res.end(msg);
-        });
+        console.log(`Owner ${req.body.shopID} get problem report!`)
+        if(req.body.shopID == undefined || req.body.reportPackage == undefined){
+            res.end('internal error')
+        }
+        else{
+            DB.add_problemReport(req.body.shopID,JSON.parse(req.body.reportPackage),function(err,msg){
+                if(err)
+                    res.end(msg);
+                else
+                    res.end(msg);
+            });
+        }
     }
 
     login(req,res){
