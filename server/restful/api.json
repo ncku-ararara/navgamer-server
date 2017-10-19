@@ -420,6 +420,39 @@
 			]
 		},
 		{
+			"name": "Lite",
+			"description": "專門給 Lite 版本使用的 api",
+			"body": [
+				{
+					"usage": "[Online] Binding imageID & shopID together (also with shopName)",
+					"method": "POST",
+					"url": "https://kevin.imslab.org/bind_lite_imageID",
+					"description": "ImageID 與店家做綁定",
+					"field":[
+						{"name": "imageID", "type": "String"},{"name": "shopID", "type": "String"}, {"name": "shopName", "type": "String"}
+					],
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"duplicated\"}",
+					"success": "{\"result\":\"success\"}"
+				},
+				{
+					"usage": "[Online] Get shop information with image id (From itself schema)",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_lite_info_indie?imageID=...",
+					"description": "從獨立資料庫中獲取 imageID 對應的店家資料",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"not found\"}",
+					"success": "{\"result\":\"JSON stringify object\"}"
+				},
+				{
+					"usage": "[Online] Get shop information with image id (From shopInfo schema)",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/get_lite_info_reuse?imageID=...",
+					"description": "從共同資料庫中獲取 imageID 對應的店家資料",
+					"error": "{\"result\":\"internal error\"}, {\"result\":\"not found\"}, {\"result\":\"not found in shop model\"}",
+					"success": "{\"result\":\"JSON stringify object\"}"
+				}
+			]
+		},
+		{
 			"name": "Template",
 			"description": "為這個說明頁面的模版範例展示",
 			"body": [

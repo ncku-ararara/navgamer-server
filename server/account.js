@@ -57,6 +57,11 @@ class UserService {
         app.get('/get_shopOwnerInfo',this.get_shopOwnerInfo); 
         app.get('/get_shopInfo',this.get_shopInfo);
         app.get('/get_shopComm',this.get_shopComm);
+
+        // For NavGamer Lite
+        app.post('/bind_lite_imageID',this.bind_lite_imageID);
+        app.get('/get_lite_info_indie',this.get_lite_info_indie);
+        app.get('/get_lite_info_reuse',this.get_lite_info_reuse);
     }
     // about user register entries
     register(req,res){
@@ -546,6 +551,33 @@ class UserService {
                 res.end(msg);
             else
                 res.end(JSON.stringify(msg)); // array of json_obj, need to be stringify
+        })
+    }
+
+    // For NavGamer Lite
+    bind_lite_imageID(req,res){
+        if(req.body.imageID == undefined || req.body.shopID == undefined || req.body.shopName == undefined){
+            res.end('internal error');
+        }
+        else{
+            DB.bind_lite_imageID(req.body.imageID,req.body.shopID,req.body.shopName,function(err,obj){
+                if(err) res.end(obj);
+                else res.end(obj);
+            })
+        }
+    }
+
+    get_lite_info_indie(req,res){
+        DB.get_lite_info_indie(req.query.imageID,function(err,obj){
+            if(err) res.end(obj);
+            else res.end(JSON.stringify(obj));
+        })
+    }    
+
+    get_lite_info_reuse(req,res){
+        DB.get_lite_info_indie(req.query.imageID,function(err,obj){
+            if(err) res.end(obj);
+            else res.end(JSON.stringify(obj));
         })
     }
 }

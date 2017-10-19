@@ -123,6 +123,12 @@ class DB {
 			rot: String,
 			scale: String
 		});
+		// NavGamer Lite (Also, can reuse the Schema of origin one)
+		this.liteSchema = mongoose.Schema({
+			imageID: String,
+			shopID: String,
+			shopName: String
+		});
 		// define schema model
 		this.user_m = mongoose.model('user_m',this.userSchema);
 		this.owner_m = mongoose.model('owner_m',this.shopKeeperSchema);
@@ -130,6 +136,8 @@ class DB {
 		this.comm_m = mongoose.model('comm_m',this.commentSchema);
 		this.adf_m = mongoose.model('adf_m',this.adfSchema);
 		this.adfobj_m = mongoose.model('adfobj_m',this.adfObjSchema);
+		// Lite 
+		this.lite_m = mongoose.model('lite_m',this.liteSchema);
 	}
 	// user-defined function
 	user_register(name,pass,email,callback){
@@ -1327,6 +1335,72 @@ class DB {
 				}
 			}
 		});
+	}
+
+	/* NavGamer Lite */
+	bind_lite_imageID(imageID,shopID,shopName,callback){
+		var lite_model = this.lite_m;
+		this.lite_m.findOne({imageID: imageID},'', function(err,match){
+			if(err)	callback(1,"internal error");
+			else{
+				if(match == null){
+					// create new for it
+					let newLite = new lite_model({imageID: imageID, shopID: shopID, shopName: shopName});
+					newLite.save(function(s_err,newLite){
+						if(s_err) callback(1,"internal error");
+						else{
+							callback(0,"success")
+						}
+					})
+				}
+				else{
+					callback(1,"duplicated")
+				}
+			}
+		});
+	}
+
+	get_lite_info_indie(imageID,callback){
+		// get information from lite Schema itself
+		this.lite.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
+			if(err) callback(1,"internal error")
+			else{
+				if(match == null){
+					callback(1,"not found")
+				}
+				else{
+					// found 
+					callback(0,match);
+				}
+			}
+		})
+	}
+
+	get_lite_info_reuse(imageID,callback){
+		// get information from NavGamer origin shop Schema (information reuse)
+		var owner_model = this.owner_m;
+		var shop_model = this.shop_m;
+		this.lite.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
+			if(err) callback(1,"internal error")
+			else{
+				if(match == null){
+					callback(1,"not found")
+				}
+				else{
+					// found , using shopID to fetch total data from NavGamer shopInfoSchema 
+					shop_model.findOne({shopID: match.shopID},'shopName shopAddress openTime infoList',function(err,info){
+						if(err) callback(1,"internal error")
+						else{
+							if(info == null) callback(1,"not found in shop model")
+							else{
+								// found, return it
+								callback(0,info);
+							}
+						}
+					})
+				}
+			}
+		})
 	}
 }
 
