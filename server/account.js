@@ -73,13 +73,13 @@ class UserService {
         console.log(`New user Register work, Username: ${username}, Password: ${password}, Email: ${email}`);
 
         if(username == undefined || password == undefined || email == undefined){
-            res.end('internal error');
+            res.status(500).send('internal error');
         }
         else{
             // get register function
             DB.user_register(username,password,email,function(err,msg){
                 if(err){
-                    res.end(msg);
+                    res.status(500).send(msg);
                 }
                 else{
                     // response
@@ -103,14 +103,14 @@ class UserService {
             || basic.intelligence == undefined || basic.like == undefined || basic.money == undefined 
             || basic.hour == undefined || basic.level == undefined)
         {
-                res.end('internal error');
+                res.status(500).send('internal error');
         }
         else{
             DB.user_basicInfo_update(basic.username,basic.password,basic.charID,
                 basic.strength,basic.intelligence,basic.like,
                 basic.money,basic.hour,basic.level,function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -121,13 +121,13 @@ class UserService {
         const propsObj = req.body;
         console.log(`User ${propsObj.username} props insert/update!`)
         if(propsObj.username == undefined || propsObj.password == undefined || propsObj.props_quant_array == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_props_insertORupdate(propsObj.username,propsObj.password,
                 JSON.parse(propsObj.props_quant_array),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -138,13 +138,13 @@ class UserService {
         const propsObj = req.body;
         console.log(`User ${propsObj.username} props delete!`)
         if(propsObj.username == undefined || propsObj.password == undefined || propsObj.props_quant_array == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_props_delete(propsObj.username,propsObj.password,
                 JSON.parse(propsObj.props_quant_array),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -155,13 +155,13 @@ class UserService {
         const furniObj = req.body;
         console.log(`User ${propsObj.username} furni insert/update!`)
         if(furniObj.username == undefined || furniObj.password == undefined || furniObj.furni_quant_array == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_furni_insertORupdate(furniObj.username,furniObj.password,
                 JSON.parse(furniObj.furni_quant_array),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -172,13 +172,13 @@ class UserService {
         const furniObj = req.body;
         console.log(`User ${propsObj.username} furni delete!`)
         if(furniObj.username == undefined || furniObj.password == undefined || furniObj.furni_quant_array == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_furni_delete(furniObj.username,furniObj.password,
                 JSON.parse(furniObj.furni_quant_array),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -188,13 +188,13 @@ class UserService {
     user_favShop_set(req,res){
         console.log(`User ${req.body.username} favorite shops list set!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.fav_shopID_list == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_favShop_set(req.body.username,req.body.password,
                 JSON.parse(req.body.fav_shopID_list),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else 
                         res.end(msg);
             });
@@ -204,13 +204,13 @@ class UserService {
     user_eventColl_set(req,res){
         console.log(`User ${req.body.username} event collection list set!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.event_coll_list == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_eventColl_set(req.body.username,req.body.password,
                 JSON.parse(req.body.event_coll_list),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else 
                         res.end(msg);
             });
@@ -220,13 +220,13 @@ class UserService {
     user_achieveColl_set(req,res){
         console.log(`User ${req.body.username} achievement collection list set!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.achieve_coll_list == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_achieveColl_set(req.body.username,req.body.password,
                 JSON.parse(req.body.achieve_coll_list),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -236,13 +236,13 @@ class UserService {
     user_charaColl_set(req,res){
         console.log(`User ${req.body.username} character collection list set!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.chara_coll_list == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_charaColl_set(req.body.username,req.body.password,
                 JSON.parse(req.body.chara_coll_list),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -253,13 +253,13 @@ class UserService {
         console.log(`User ${req.body.username} street view set!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.mode_flag == undefined
             || req.body.obj_flag == undefined || req.body.info_flag == undefined){
-                res.end('internal error')
+                res.status(500).send('internal error')
         }
         else{
             DB.user_streetView_set(req.body.username,req.body.password,req.body.mode_flag,
                 req.body.obj_flag,req.body.info_flag,function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
                 });
@@ -269,13 +269,13 @@ class UserService {
     user_decoration_record(req,res){
         console.log(`User ${req.body.username} decoration record!`)
         if(req.body.username == undefined || req.body.password == undefined || req.body.decoration_record == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.user_decoration_record(req.body.username,req.body.password,
                 JSON.parse(req.body.decoration_record),function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else
                         res.end(msg);
             });
@@ -285,7 +285,7 @@ class UserService {
     get_userInfo(req,res){
         DB.user_fetch(req.query.username,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(JSON.stringify(msg));
         });
@@ -294,12 +294,12 @@ class UserService {
     add_problemReport(req,res){
         console.log(`Owner ${req.body.shopID} get problem report!`)
         if(req.body.shopID == undefined || req.body.reportPackage == undefined){
-            res.end('internal error')
+            res.status(500).send('internal error')
         }
         else{
             DB.add_problemReport(req.body.shopID,JSON.parse(req.body.reportPackage),function(err,msg){
                 if(err)
-                    res.end(msg);
+                    res.status(500).send(msg);
                 else
                     res.end(msg);
             });
@@ -313,7 +313,7 @@ class UserService {
         // get login function
         DB.user_login(username,password,function(err,msg){
             if(err){
-                res.end(msg);
+                res.status(500).send(msg);
             }
             else{
                 res.end(msg);
@@ -327,7 +327,7 @@ class UserService {
         // using username to find and generate code for it
         DB.user_gettmpcode(username,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 // using msg as user mail to deliver
                 var content = fs.readFileSync(path.join(__dirname,'mail',ltype,'verify.txt'),'utf-8');
@@ -336,7 +336,7 @@ class UserService {
                     if(err){
                         // Error
                         MailMan.mail(msg.email,"[Error] NavGamer - code for recovery","Internal Server error",function(err,m_msg){                    
-                            res.end("internal error");
+                            res.status(500).send("internal error");
                         });
                     }
                     else{
@@ -356,7 +356,7 @@ class UserService {
         // verify by db 
         DB.user_verify(username,code,function(err,msg){
             if(err){
-                res.end(msg)
+                res.status(500).send(msg)
             }
             else{
                 MailMan.mail(msg.email,"NavGamer - Your password",msg.password,function(err,m_msg){                    
@@ -372,7 +372,7 @@ class UserService {
         DB.user_checkmail(email,function(err,msg){
             console.log("Checking mail result: " + msg);
             if(err){
-                res.end(msg);
+                res.status(500).send(msg);
             }
             else{
                 res.end(msg);
@@ -388,7 +388,7 @@ class UserService {
             owner.shop_principal,owner.shop_principal_gender,owner.shop_principal_phone,
             owner.shop_principal_email,function(err,msg){
                 if(err)
-                    res.end(msg)
+                    res.status(500).send(msg)
                 else{
                     res.end(msg);
                     // email to notify this user !
@@ -405,7 +405,7 @@ class UserService {
         const shopID = req.body.shopID, password = req.body.password;
         DB.shopkeeper_login(shopID,password,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 res.end(msg);
             }
@@ -417,7 +417,7 @@ class UserService {
         const ltype = ( req.query.ltype == undefined ? 'TW' : req.query.ltype );
         DB.shopkeeper_gettmpcode(shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 // using msg as user mail to deliver
                 var content = fs.readFileSync(path.join(__dirname,'mail',ltype,'verify_shop.txt'),'utf-8');
@@ -426,7 +426,7 @@ class UserService {
                     if(err){
                         // Error
                         MailMan.mail(msg.email,"[Error] NavGamer - code for recovery","Internal Server error",function(err,m_msg){                    
-                            res.end("internal error");
+                            res.status(500).send("internal error");
                         });
                     }
                     else{
@@ -446,7 +446,7 @@ class UserService {
         // verify
         DB.shopkeeper_verify(shopID,code,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 MailMan.mail(msg.email,"NavGamer - Your password",msg.password,function(err,m_msg){                    
                     res.end("password send");
@@ -459,7 +459,7 @@ class UserService {
         const email = req.query.email;
         DB.shopkeeper_checkmail(email,function(err,msg){
             if(err){
-                res.end(msg);
+                res.status(500).send(msg);
             }
             else{
                 res.end(msg);
@@ -470,7 +470,7 @@ class UserService {
     set_shopUpdateTime(req,res){
         DB.set_shopkeeper_time(req.query.shopID,req.query.updateTime,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(msg);
         });
@@ -479,7 +479,7 @@ class UserService {
     get_shopUpdateTime(req,res){
         DB.get_shopkeeper_time(req.query.shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(msg);
         });
@@ -488,7 +488,7 @@ class UserService {
     shopName2shopID(req,res){
         DB.shopName2shopID(req.query.shopName,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(msg); // now msg = shopID (which has been found)
         });
@@ -498,7 +498,7 @@ class UserService {
         // using shopID to get information of shop owner information (distinguish from comment)
         DB.shopkeeper_fetch(req.query.shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(JSON.stringify(msg)); // json_obj need, to be stringify
         });
@@ -508,7 +508,7 @@ class UserService {
         // using shopID to get information of shop information
         DB.shopInfo_download(req.query.shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(JSON.stringify(msg)); // stringify json object
         });
@@ -520,7 +520,7 @@ class UserService {
         DB.shopInfo_update(infoBody.shopID,infoBody.password,infoBody.shopName,
             infoBody.shopAddress,JSON.parse(infoBody.openTime),JSON.parse(infoBody.infoList),function(err,msg){
                 if(err)
-                    res.end(msg);
+                    res.status(500).send(msg);
                 else
                     res.end(msg);
             })
@@ -538,7 +538,7 @@ class UserService {
             file_tmp,file_type,commBody.time,commBody.score,
             function(err,msg){
                 if(err)
-                    res.end(msg);
+                    res.status(500).send(msg);
                 else 
                     res.end(msg);
             });
@@ -548,7 +548,7 @@ class UserService {
         // using shopID to get total comment about this shop
         DB.get_comments(req.query.shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(JSON.stringify(msg)); // array of json_obj, need to be stringify
         })
@@ -557,11 +557,11 @@ class UserService {
     // For NavGamer Lite
     bind_lite_imageID(req,res){
         if(req.body.imageID == undefined || req.body.shopID == undefined || req.body.shopName == undefined){
-            res.end('internal error');
+            res.status(500).send('internal error');
         }
         else{
             DB.bind_lite_imageID(req.body.imageID,req.body.shopID,req.body.shopName,function(err,obj){
-                if(err) res.end(obj);
+                if(err) res.status(500).send(obj);
                 else res.end(obj);
             })
         }
@@ -569,14 +569,14 @@ class UserService {
 
     get_lite_info_indie(req,res){
         DB.get_lite_info_indie(req.query.imageID,function(err,obj){
-            if(err) res.end(obj);
+            if(err) res.status(500).send(obj);
             else res.end(JSON.stringify(obj));
         })
     }    
 
     get_lite_info_reuse(req,res){
         DB.get_lite_info_indie(req.query.imageID,function(err,obj){
-            if(err) res.end(obj);
+            if(err) res.status(500).send(obj);
             else res.end(JSON.stringify(obj));
         })
     }

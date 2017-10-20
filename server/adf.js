@@ -45,17 +45,17 @@ class AdfService {
 
     create_beaconID(req,res){
         if(req.body.auth_flag == undefined || req.body.beaconID == undefined){
-            res.end("error input format");
+            res.status(500).send("error input format");
         }
         DB.set_adf_beaconID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,
             function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 // create folder 
                 mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID),function(err){
                     if(err)
-                        res.end("create folder error");
+                        res.status(500).send("create folder error");
                     else 
                         res.end(msg); // fully success
                 });
@@ -65,17 +65,17 @@ class AdfService {
 
     create_adfID(req,res){
         if(req.body.auth_flag == undefined || req.body.beaconID == undefined || req.body.adfID == undefined){
-            res.end("error input format");
+            res.status(500).send("error input format");
         }
         DB.set_adf_adfID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
             function(err,msg){
                 if(err)
-                    res.end(msg);
+                    res.status(500).send(msg);
                 else{
                     // create folder 
                     mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID),function(err){
                         if(err)
-                            res.end("create folder error");
+                            res.status(500).send("create folder error");
                         else 
                             res.end(msg); // fully success
                     });
@@ -85,18 +85,18 @@ class AdfService {
 
     create_shop(req,res){
         if(req.body.shopID == undefined || req.body.password == undefined || req.body.auth_flag == undefined || req.body.beaconID == undefined || req.body.adfID == undefined){
-            res.end("error input format");
+            res.status(500).send("error input format");
         }
         else{
             DB.set_adf_shopID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
                 function(err,msg){
                     if(err)
-                        res.end(msg);
+                        res.status(500).send(msg);
                     else{
                         // create folder 
                         mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID),function(err){
                             if(err)
-                                res.end("create folder error");
+                                res.status(500).send("create folder error");
                             else 
                                 res.end(msg); // fully success
                         });
@@ -109,7 +109,7 @@ class AdfService {
         // list all existed 
         DB.list_storage_hierarchy(function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else{
                 // FIXME: using fsx to check and auto-recovery the mistake
                 res.end(JSON.stringify(msg));
@@ -121,24 +121,24 @@ class AdfService {
         // fetch beacon ID, and adf ID
         // console.log(req.file);
         if(req.body.beaconID == undefined || req.body.adfID == undefined || req.file == undefined){
-            res.end("error");
+            res.status(500).send("error");
         }
         else{
             // checking path 
-            fsx.pathExists(path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID))
+            fsx.pathExists(path.join(__dirname,'..',"ararara-download",req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase()))
             .then(exists => {
                 if(exists == false)
-                    res.end("error ID");
+                    res.status(500).send("error ID");
                 else{
                     // moving files (overwrite)
                     fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
-                        path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.adfID+".adf")
+                        path.join(__dirname,'..',"ararara-download",req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),req.body.adfID.toUpperCase()+".adf")
                         ,{ overwrite: true })
                         .then(() => {
                             res.end("uploaded");
                         })
                         .catch( err => {
-                            res.end("error");
+                            res.status(500).send("error");
                         });
                 }
             });
@@ -146,78 +146,82 @@ class AdfService {
     }
 
     get_adf(req,res){
-        var file = path.join(__dirname,'..','ararara-download',req.query.beaconID,req.query.adfID,req.query.adfID+".adf");
+        var file = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase(),req.query.adfID.toUpperCase(),req.query.adfID.toUpperCase()+".adf");
         fsx.pathExists(file).then(exists => {
-            if(exists == false)
-                res.end("error ID");
-            else
+            if(exists == false){
+                // console.log(`Failure download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
+                res.status(500).send("error ID");
+            }
+            else{
+                // console.log(`Successfully download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
                 res.download(file);
+            }
         }).catch( err => {
-            res.end("error");
+            res.status(500).send("error");
         });
     }
 
     add_obj(req,res){
         if(req.body.beaconID == undefined || req.body.adfID == undefined || req.body.shopID == undefined || req.file == undefined){
-            res.end("error");
+            res.status(500).send("error");
         }
         else{
             // check 
-            var file = path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID);
+            var file = path.join(__dirname,'..','ararara-download',req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),req.body.shopID);
             fsx.pathExists(file).then(exists => {
                 if(exists == false)
-                    res.end("error ID");
+                    res.status(500).send("error ID");
                 else{
                     // moving files (overwrite if the file is already existed)
                     fsx.move(path.join('/tmp/navgamer-tmp',req.file.originalname),
-                            path.join(__dirname,'..',"ararara-download",req.body.beaconID,req.body.adfID,req.body.shopID,req.body.id),
+                            path.join(__dirname,'..',"ararara-download",req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),req.body.shopID,req.body.id),
                             { overwrite: true })
                             .then(() => {
                                 // add info obj into shop
                                 DB.add_adf_obj(req.body.shopID,req.body.password,req.body.shopName,
-                                    req.body.shopIntro,req.body.id,req.body.beaconID,
-                                    req.body.adfID,req.body.pos,req.body.rot,req.body.scale,function(err,msg){
+                                    req.body.shopIntro,req.body.id,req.body.beaconID.toUpperCase(),
+                                    req.body.adfID.toUpperCase(),req.body.pos,req.body.rot,req.body.scale,function(err,msg){
                                         if(err)
-                                            res.end(msg);
+                                            res.status(500).send(msg);
                                         else
                                             res.end(msg);
                                 });
                             })
                             .catch( err => {
-                                res.end("error");
+                                res.status(500).send("error");
                             });
                 }
             }).catch( err => {
-                res.end("error");
+                res.status(500).send("error");
             });
         }
     }
 
     get_obj_file(req,res){
-        var file = path.join(__dirname,'..','ararara-download',req.query.beaconID,req.query.adfID,req.query.shopID,req.query.id);
+        var file = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase(),req.query.adfID.toUpperCase(),req.query.shopID,req.query.id);
         fsx.pathExists(file).then(exists => {
             if(exists == false)
-                res.end("error ID");
+                res.status(500).send("error ID");
             else
                 res.download(file);
         }).catch( err => {
-            res.end("error");
+            res.status(500).send("error");
         });
     }
 
     get_obj_info(req,res){
-        DB.get_adf_obj(req.query.id,req.query.beaconID,req.query.adfID,req.query.shopID,function(err,msg){
+        DB.get_adf_obj(req.query.id,req.query.beaconID.toUpperCase(),req.query.adfID.toUpperCase(),req.query.shopID,function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else
                 res.end(JSON.stringify(msg));
         });
     }
 
     get_shopIDs(req,res){
-        DB.get_shopIDs_byadfID(req.query.beaconID,req.query.adfID,function(err,msg){
+        DB.get_shopIDs_byadfID(req.query.beaconID.toUpperCase(),req.query.adfID.toUpperCase(),function(err,msg){
             if(err)
-                res.end(msg);
+                res.status(500).send(msg);
             else 
                 res.end(JSON.stringify(msg)); // return json array
         });
