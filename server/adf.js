@@ -47,13 +47,13 @@ class AdfService {
         if(req.body.auth_flag == undefined || req.body.beaconID == undefined){
             res.status(500).send("error input format");
         }
-        DB.set_adf_beaconID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,
+        DB.set_adf_beaconID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID.toUpperCase(),
             function(err,msg){
             if(err)
                 res.status(500).send(msg);
             else{
                 // create folder 
-                mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID),function(err){
+                mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID.toUpperCase()),function(err){
                     if(err)
                         res.status(500).send("create folder error");
                     else 
@@ -67,13 +67,13 @@ class AdfService {
         if(req.body.auth_flag == undefined || req.body.beaconID == undefined || req.body.adfID == undefined){
             res.status(500).send("error input format");
         }
-        DB.set_adf_adfID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
+        DB.set_adf_adfID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),
             function(err,msg){
                 if(err)
                     res.status(500).send(msg);
                 else{
                     // create folder 
-                    mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID),function(err){
+                    mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase()),function(err){
                         if(err)
                             res.status(500).send("create folder error");
                         else 
@@ -88,13 +88,13 @@ class AdfService {
             res.status(500).send("error input format");
         }
         else{
-            DB.set_adf_shopID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID,req.body.adfID,
+            DB.set_adf_shopID(req.body.shopID,req.body.password,req.body.auth_flag,req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),
                 function(err,msg){
                     if(err)
                         res.status(500).send(msg);
                     else{
                         // create folder 
-                        mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID,req.body.adfID,req.body.shopID),function(err){
+                        mkdirp(path.join(__dirname,'..','ararara-download',req.body.beaconID.toUpperCase(),req.body.adfID.toUpperCase(),req.body.shopID),function(err){
                             if(err)
                                 res.status(500).send("create folder error");
                             else 

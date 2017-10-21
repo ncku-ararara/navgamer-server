@@ -11,6 +11,8 @@ class Debugger {
 		app.post('/de_upload',this.de_upload);
 		// chatbot testing 
 		app.get('/chatbot',this.chatbot);
+		// chatbot training 
+		app.get('/chatbot_training',this.chatbot_training)
 	}
 	
 	test(req,res){
@@ -26,9 +28,27 @@ class Debugger {
 	
 	chatbot(req,res){
 		chatBot.commute(req.query.str,function(err,data){
-			console.log("Get Result: " + data);
-			res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
-			res.end(data); // only response goes here
+			if(err){
+				res.status(500).send(data);
+			}
+			else{
+				console.log("Get Result: " + data);
+				res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
+				res.end(data); // only response goes here
+			}
+		});
+	}
+
+	chatbot_training(req,res){
+		chatBot.train(req.query.str,function(err,data){
+			if(err){
+				res.status(500).send(data);
+			}
+			else{
+				console.log("Get Result: " + data);
+				res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
+				res.end(data); // only response goes here
+			}
 		});
 	}
 }

@@ -9,7 +9,7 @@ so when we want to call this program, we have to use the "relatively" directory 
 
 chatbot = ChatBot(
 "KevinBOT",
-trainer='chatterbot.trainers.ChatterBotCorpusTrainer',
+#trainer='chatterbot.trainers.ChatterBotCorpusTrainer',
 database = "./server/chatbot/KevinBOT_DB.json" 
 )
 

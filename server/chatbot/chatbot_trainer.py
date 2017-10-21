@@ -7,7 +7,7 @@ start = time.time()
 chatbot = ChatBot(
 "KevinBOT",
 trainer='chatterbot.trainers.ChatterBotCorpusTrainer',
-database="./KevinBOT_DB.json"
+database="./server/chatbot/KevinBOT_DB.json"
 )
 
 ''' Training the existed corpus
@@ -15,9 +15,15 @@ chatbot.set_trainer(ChatterBotCorpusTrainer)
 chatbot.train("chatterbot.corpus.chinese")
 '''
 
+# Train by existed chinese
+chatbot.train("chatterbot.corpus.chinese")
+
 # Training user-defined data
-chatbot.train("./data/") # run by manually 
-# chatbot.train("./server/chatbot/data"); # run by program
+# chatbot.train("./data/ganhua.yml") # run by manually 
+chatbot.train("./server/chatbot/data/conversations.yml"); # run by program
+chatbot.train("./server/chatbot/data/ganhua.yml"); # run by program
+chatbot.train("./server/chatbot/data/greetings.yml"); # run by program
+chatbot.train("./server/chatbot/data/navgamer.yml"); # run by program
 
 end = time.time();
 
