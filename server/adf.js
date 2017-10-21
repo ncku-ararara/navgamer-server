@@ -35,6 +35,7 @@ class AdfService {
         // upload/download adf data 
         app.post('/add_adf',upload.single('file'),this.add_adf);
         app.get('/get_adf',this.get_adf);
+        app.get('/get_adf_bybeacon',this.get_adf_bybeacon);
         // store object into specific shop
         app.post('/add_obj',upload.single('file'),this.add_obj);
         app.get('/get_obj_file',this.get_obj_file);
@@ -149,16 +150,41 @@ class AdfService {
         var file = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase(),req.query.adfID.toUpperCase(),req.query.adfID.toUpperCase()+".adf");
         fsx.pathExists(file).then(exists => {
             if(exists == false){
-                // console.log(`Failure download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
+                console.log(`Failure download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
                 res.status(500).send("error ID");
             }
             else{
-                // console.log(`Successfully download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
+                console.log(`Successfully download file from server: ${req.query.beaconID.toUpperCase()}\\${req.query.adfID.toUpperCase()}`);
                 res.download(file);
             }
         }).catch( err => {
             res.status(500).send("error");
         });
+    }
+
+    get_adf_bybeacon(req,res){
+        var beacon_folder_path = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase());
+        fs.readdir(beacon_folder_path,(err,files)=>{
+            if(err) res.status.send("error");
+            else{
+                // only one adf
+                let adfID = files[0];
+                console.log(`Get adfID: ${adfID}`);
+                var file = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase(),adfID,adfID+".adf");
+                fsx.pathExists(file).then(exists => {
+                    if(exists == false){
+                        console.log(`[BeaconID] Failure download file from server: ${req.query.beaconID.toUpperCase()}\\${adfID}`);
+                        res.status(500).send("error ID");
+                    }
+                    else{
+                        console.log(`[BeaconID] Successfully download file from server: ${req.query.beaconID.toUpperCase()}\\${adfID}`);
+                        res.download(file);
+                    }
+                }).catch( err => {
+                    res.status(500).send("error");
+                });
+            }
+        })
     }
 
     add_obj(req,res){

@@ -11,6 +11,7 @@ const { IntroService } = require('./server/intro');
 const { DB } = require('./server/db');
 const { UserService } = require('./server/account');
 const { AdfService } = require('./server/adf');
+const { Lite } = require('./server/lite');
 const { IO } = require('./server/io');
 const { IOService } = require('./server/io_service');
 /* define app(2 for secure & download) */
@@ -63,6 +64,8 @@ UserService.init(app);
 UserService.init(app_s);
 AdfService.init(app);
 AdfService.init(app_s);
+Lite.init(app);
+Lite.init(app_s);
 
 /* Special for https */
 IO.init(secure_server);

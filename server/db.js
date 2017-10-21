@@ -1362,7 +1362,7 @@ class DB {
 
 	get_lite_info_indie(imageID,callback){
 		// get information from lite Schema itself
-		this.lite.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
+		this.lite_m.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
 			if(err) callback(1,"internal error")
 			else{
 				if(match == null){
@@ -1380,7 +1380,7 @@ class DB {
 		// get information from NavGamer origin shop Schema (information reuse)
 		var owner_model = this.owner_m;
 		var shop_model = this.shop_m;
-		this.lite.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
+		this.lite_m.findOne({imageID: imageID},'imageID shopID shopName',function(err,match){
 			if(err) callback(1,"internal error")
 			else{
 				if(match == null){

@@ -59,9 +59,9 @@ class UserService {
         app.get('/get_shopComm',this.get_shopComm);
 
         // For NavGamer Lite
-        app.post('/bind_lite_imageID',this.bind_lite_imageID);
+        /*app.post('/bind_lite_imageID',this.bind_lite_imageID);
         app.get('/get_lite_info_indie',this.get_lite_info_indie);
-        app.get('/get_lite_info_reuse',this.get_lite_info_reuse);
+        app.get('/get_lite_info_reuse',this.get_lite_info_reuse);*/
     }
     // about user register entries
     register(req,res){
@@ -555,7 +555,7 @@ class UserService {
     }
 
     // For NavGamer Lite
-    bind_lite_imageID(req,res){
+    /*bind_lite_imageID(req,res){
         if(req.body.imageID == undefined || req.body.shopID == undefined || req.body.shopName == undefined){
             res.status(500).send('internal error');
         }
@@ -569,6 +569,9 @@ class UserService {
 
     get_lite_info_indie(req,res){
         DB.get_lite_info_indie(req.query.imageID,function(err,obj){
+            
+            res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
+
             if(err) res.status(500).send(obj);
             else res.end(JSON.stringify(obj));
         })
@@ -576,10 +579,13 @@ class UserService {
 
     get_lite_info_reuse(req,res){
         DB.get_lite_info_indie(req.query.imageID,function(err,obj){
+
+            res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
+            
             if(err) res.status(500).send(obj);
             else res.end(JSON.stringify(obj));
         })
-    }
+    }*/
 }
 
 module.exports = {

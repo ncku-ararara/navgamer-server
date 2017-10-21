@@ -416,6 +416,14 @@
 					"description": "取得一次 chatbot 的回覆訊息",
 					"error": "{\"result\":\"internal error\"}, {\"result\":\"external error\"}",
 					"success": "{\"result\":\"success\"}"
+				},
+				{
+					"usage": "[Debug] Get Chatbot re-training",
+					"method": "GET",
+					"url": "https://kevin.imslab.org/chatbot_training?str=...",
+					"description": "重新訓練 chatbot 的資料庫",
+					"error": "{\"result\":\"error message from training\"}",
+					"success": "{\"result\":\"(display the training detail messages)\"}"
 				}
 			]
 		},
