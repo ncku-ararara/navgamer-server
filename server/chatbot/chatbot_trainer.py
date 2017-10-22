@@ -1,13 +1,22 @@
 ﻿import sys,os,time
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.response_selection import get_random_response
 
 start = time.time()
 
 chatbot = ChatBot(
 "KevinBOT",
 trainer='chatterbot.trainers.ChatterBotCorpusTrainer',
-database="./server/chatbot/KevinBOT_DB.json"
+database="./server/chatbot/KevinBOT_DB.json",
+response_selection_method=get_random_response,
+# tie_breaking_method="random_response",
+logic_adapters=[
+        {
+            "import_path": "chatterbot.logic.BestMatch",
+            "response_selection_method": "chatterbot.response_selection.get_random_response"
+        }
+    ]
 )
 
 ''' Training the existed corpus

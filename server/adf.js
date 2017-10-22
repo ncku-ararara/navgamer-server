@@ -165,7 +165,7 @@ class AdfService {
     get_adf_bybeacon(req,res){
         var beacon_folder_path = path.join(__dirname,'..','ararara-download',req.query.beaconID.toUpperCase());
         fs.readdir(beacon_folder_path,(err,files)=>{
-            if(err) res.status.send("error");
+            if(err) res.status(500).send("error");
             else{
                 // only one adf
                 let adfID = files[0];

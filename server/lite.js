@@ -34,7 +34,7 @@ class Lite {
     }    
 
     get_lite_info_reuse(req,res){
-        DB.get_lite_info_indie(req.query.imageID,function(err,obj){
+        DB.get_lite_info_reuse(req.query.imageID,function(err,obj){
 
             res.set({ 'content-type': 'application/json; charset=utf-8' }); // ensure encoding format is right
             
